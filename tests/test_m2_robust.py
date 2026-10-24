@@ -29,7 +29,7 @@ def test_build_edits_and_metadata():
     nb = json.loads(nb_path.read_text())
     code = ["".join(c["source"]) for c in nb["cells"]]
     assert "ARC3_KEEPALIVE_SECONDS'] = '240'" in code[4]
-    assert "ARC3_HTTP_RETRY_INITIAL_SECONDS'] = '5400'" in code[4]
+    assert "ARC3_HTTP_RETRY_INITIAL_SECONDS'] = '7200'" in code[4]
     assert "m2-robust: keepalive patch applied" in code[4]
     assert "SERVER_STARTUP_TIMEOUT = 90" in code[4]
     assert "timeout_s=1800.0" in code[20]

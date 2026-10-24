@@ -5,11 +5,11 @@ Only reliability changes; the agent, model, prompts and scheduler are untouched.
   1. Keepalive: the warmup game keeps sending a RESET every ARC3_KEEPALIVE_SECONDS while the
      model server is still loading, so the gateway's 15-minute idle rule cannot end the run at
      0.00 when model loading is slow (Discussion #751598 / #751631 / #750173).
-  2. First-request grace 900 s -> 5400 s, so the other games do not give up on a slow server.
+  2. First-request grace 900 s -> 7200 s (= keepalive cap; v1 used 5400), so the other games do not give up on a slow server.
   3. Gateway wait 600 s -> 1800 s.
   4. TRUE_SUBMISSION also turns on when the host name "gateway" resolves (guards against the
      rerun flag not being seen, #affectify D1).
-  5. Rehearsal (interactive Save & Run only): 2 public games, 1 pass, 25 min each, server released
+  5. Rehearsal (interactive Save & Run only): 2 public games, 1 pass, 80 min each (covers ~55 min model load), server released
      after 90 s so the keepalive path is exercised. The scored-rerun branch is not affected.
 
 Every edit asserts that its anchor occurs exactly once.
@@ -115,7 +115,7 @@ def build() -> Path:
     # --- cell 4: env, keepalive patch, TRUE_SUBMISSION fallback, rehearsal release ---
     c = src(4)
     c = replace_once(c, "os.environ['ARC3_HTTP_RETRY_INITIAL_SECONDS'] = '900'\n",
-                     "os.environ['ARC3_HTTP_RETRY_INITIAL_SECONDS'] = '5400'  # m2-robust: 900 -> 5400\n"
+                     "os.environ['ARC3_HTTP_RETRY_INITIAL_SECONDS'] = '7200'  # m2-robust: 900 -> 7200\n"
                      "os.environ['ARC3_KEEPALIVE_SECONDS'] = '240'      # m2-robust\n"
                      "os.environ['ARC3_KEEPALIVE_MAX_SECONDS'] = '7200' # m2-robust\n", "cell4 env")
     c = replace_once(c, "print('harness patch applied successfully')\n",
@@ -152,7 +152,7 @@ if not TRUE_SUBMISSION:
                   "if not TRUE_SUBMISSION:  # m2-robust rehearsal: short, proves start-up + actions\n"
                   "    bm.n_passes = 1\n"
                   f"    bm.solver.concurrency = {len(REHEARSAL_GAMES)}\n"
-                  "    bm.solver.max_runtime_s_per_game = 25 * 60  # includes waiting for the server\n\n# show config\n", 1)
+                  "    bm.solver.max_runtime_s_per_game = 80 * 60  # model load alone took 54 min on 2026-10-24\n\n# show config\n", 1)
     assert "m2-robust rehearsal: short" in c
     put(16, c)
 
