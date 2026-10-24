@@ -10,3 +10,4 @@ recordings/
 .env
 *.parquet
 .DS_Store
+kernels/*/out/
