@@ -14,7 +14,9 @@ Only reliability changes; the agent, model, prompts and scheduler are untouched.
 
 Every edit asserts that its anchor occurs exactly once.
 
-Usage: uv run python kernels/m2_robust/build.py  -> kernels/m2_robust/out/
+Usage: uv run python kernels/m2_robust/build.py [robust] [dprime]  -> kernels/m2_robust/out/<variant>/
+
+Variant "dprime" additionally inserts tantan0327's D' slot-priority cell (third_party/dprime_tantan0327).
 """
 
 from __future__ import annotations
@@ -27,8 +29,11 @@ ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / "third_party" / "dfranzen_m2"
 SRC_NB = SRC_DIR / "arc-agi-3-milestone-2-solution.ipynb"
 OUT = Path(__file__).resolve().parent / "out"
-KERNEL_ID = "taichiiiii/arc3-m2-robust"
-TITLE = "arc3-m2-robust"
+VARIANTS = {
+    # name: (kernel slug, extra cell file or None)
+    "robust": ("arc3-m2-robust", None),
+    "dprime": ("arc3-m2-robust-dprime", ROOT / "third_party" / "dprime_tantan0327" / "priority_form_cell.py"),
+}
 REHEARSAL_GAMES = ["ls20", "ft09"]
 ALL_PUBLIC = ["ar25", "bp35", "cd82", "cn04", "dc22", "ft09", "g50t", "ka59", "lf52", "lp85",
               "ls20", "m0r0", "r11l", "re86", "s5i5", "sb26", "sc25", "sk48", "sp80", "su15",
@@ -104,7 +109,9 @@ def replace_once(text: str, old: str, new: str, where: str) -> str:
     return text.replace(old, new)
 
 
-def build() -> Path:
+def build(variant: str = "robust") -> Path:
+    slug, extra_cell = VARIANTS[variant]
+    kernel_id = f"taichiiiii/{slug}"
     nb = json.loads(SRC_NB.read_text())
     cells = nb["cells"]
     src = lambda i: "".join(cells[i]["source"])  # noqa: E731
@@ -163,27 +170,36 @@ if not TRUE_SUBMISSION:
                      "cell20 gateway")
     put(20, c)
 
+    # optional extra cell, inserted right after the customization hook (cell 16)
+    if extra_cell is not None:
+        cells.insert(17, {"cell_type": "code", "metadata": {}, "outputs": [], "execution_count": None,
+                          "source": Path(extra_cell).read_text().splitlines(keepends=True)})
+
     # strip outputs
     for cell in cells:
         if cell["cell_type"] == "code":
             cell["outputs"] = []
             cell["execution_count"] = None
 
-    if OUT.exists():
-        shutil.rmtree(OUT)
-    OUT.mkdir(parents=True)
-    nb_name = f"{TITLE}.ipynb"
-    (OUT / nb_name).write_text(json.dumps(nb, indent=1, ensure_ascii=False))
+    out = OUT / variant
+    if out.exists():
+        shutil.rmtree(out)
+    out.mkdir(parents=True)
+    nb_name = f"{slug}.ipynb"
+    (out / nb_name).write_text(json.dumps(nb, indent=1, ensure_ascii=False))
     meta = json.loads((SRC_DIR / "kernel-metadata.json").read_text())
     for k in ("id_no",):
         meta.pop(k, None)
-    meta.update({"id": KERNEL_ID, "title": TITLE, "code_file": nb_name, "is_private": True,
+    meta.update({"id": kernel_id, "title": slug, "code_file": nb_name, "is_private": True,
                  "keywords": []})
     assert meta["is_private"] is True and meta["enable_internet"] is False
-    (OUT / "kernel-metadata.json").write_text(json.dumps(meta, indent=2))
-    print("built", OUT / nb_name)
-    return OUT / nb_name
+    (out / "kernel-metadata.json").write_text(json.dumps(meta, indent=2))
+    print("built", out / nb_name)
+    return out / nb_name
 
 
 if __name__ == "__main__":
-    build()
+    import sys
+
+    for v in sys.argv[1:] or ["robust"]:
+        build(v)

@@ -131,3 +131,44 @@ def test_keepalive_respects_cap_when_server_never_comes(monkeypatch):
     _keepalive_fn()(sess, _Run())
     assert time.monotonic() - t0 < 2.0
     assert sess.resets >= 2
+
+
+def test_build_dprime_variant_inserts_cell_only():
+    nb_path = build.build("dprime")
+    nb = json.loads(nb_path.read_text())
+    robust = json.loads(build.build("robust").read_text())
+    code = ["".join(c["source"]) for c in nb["cells"]]
+    rob = ["".join(c["source"]) for c in robust["cells"]]
+    extra = (ROOT / "third_party/dprime_tantan0327/priority_form_cell.py").read_text()
+    assert code[17] == extra
+    assert code[:17] == rob[:17] and code[18:] == rob[17:]
+    meta = json.loads((nb_path.parent / "kernel-metadata.json").read_text())
+    assert meta["id"] == "taichiiiii/arc3-m2-robust-dprime" and meta["is_private"] is True
+
+
+def _harness_importable():
+    try:
+        import inference.agent.tool_agent  # noqa: F401
+        import inference.framework.solver  # noqa: F401
+        return True
+    except Exception:
+        return False
+
+
+@pytest.mark.skipif(not _harness_importable(), reason="needs the TAAF harness on PYTHONPATH")
+def test_dprime_installs_on_real_harness_and_orders_sensibly():
+    import inference.agent.tool_agent as ta
+    import inference.framework.solver as sv
+
+    orig_pv = ta.priority_value
+    os.environ["ARC3_PRIORITY_FORM"] = "dprime"
+    ns: dict = {}
+    exec((ROOT / "third_party/dprime_tantan0327/priority_form_cell.py").read_text(), ns)
+    try:
+        assert ta.priority_value is ns["priority_value"]
+        snap = ta.PrioritySnapshot
+        fast = ns["priority_value"](snap(3, 10, 5000.0, 20000.0, 7))
+        stuck = ns["priority_value"](snap(3, 400, 300000.0, 20000.0, 7))
+        assert fast > stuck > 0
+    finally:
+        ta.priority_value = orig_pv
