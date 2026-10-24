@@ -29,6 +29,7 @@ uv run python scripts/local_eval.py --games ls20 ft09 --max-actions 1000 --out w
 ## 構成
 
 ```
+AGENTS.md                      作業ルール（必読）
 docs/competition.md            コンペ内容のまとめ（ルール・評価・締切・LB の状況）
 analysis/experiment_ledger.md  実験台帳（判定規則を先に書く）
 CHECKLIST.md                   進行チェックリスト（テンプレート由来）
