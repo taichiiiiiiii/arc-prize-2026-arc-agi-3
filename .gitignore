@@ -1,0 +1,12 @@
+data/
+work/
+*.zip
+kaggle.json
+.venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+recordings/
+.env
+*.parquet
+.DS_Store
