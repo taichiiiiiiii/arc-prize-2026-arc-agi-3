@@ -13,7 +13,9 @@
    "markers": [
     "m2-robust: keepalive patch applied",
     "taaf.kaggle: TRUE_SUBMISSION=False"
-   ]
+   ],
+   "verify": "ok",
+   "verify_detail": "games ft09 0.0/6 lv tok=0, ls20 0.0/7 lv tok=0, ft09 0.0/6 lv tok=7941, ls20 0.0/7 lv tok=5260, ft09 4.0/6 lv tok=82954, ls20 1.0/7 lv tok=73967, ft09 4.0/6 lv tok=157563, ls20 1.0/7 lv tok=138117, ft09 4.0/6 lv tok=237179, ls20 2.0/7 lv tok=201211, ft09 4.0/6 lv tok=285030, ls20 3.0/7 lv tok=264226, ft09 4.0/6 lv tok=369833, ls20 4.0/7 lv tok=306176, ft09 4.0/6 lv tok=449150, ls20 4.0/7 lv tok=339785"
   },
   {
    "tag": "E4",

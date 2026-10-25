@@ -77,7 +77,8 @@ def verify_kernel(item: dict) -> tuple[str, str]:
         missing.append("a game with tokens>0")
     if missing:
         return "fail", "missing: " + "; ".join(missing)
-    return "ok", "games " + ", ".join(f"{g[0][:4]} {g[2]}/{g[3]} lv tok={g[5]}" for g in games)
+    final = {g[0]: g for g in games}  # summaries repeat during the run; keep the last per game
+    return "ok", ", ".join(f"{g[0][:4]} {float(g[2]):.0f}/{g[3]} lv tok={g[5]}" for g in final.values())
 
 
 def append_log(row: dict) -> None:
