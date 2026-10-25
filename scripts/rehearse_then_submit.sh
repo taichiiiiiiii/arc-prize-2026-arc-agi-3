@@ -44,9 +44,11 @@ import csv,sys; r=list(csv.DictReader(l for l in sys.stdin if ',' in l))
 print(sum(1 for x in r if x.get('date','').startswith('$today')))")
   dup=$(k competitions submissions $COMP --page-size 20 --csv | grep -cF "$MSG")
   [ "$dup" -gt 0 ] && { echo "already submitted: $MSG"; exit 0; }
-  [ "$used" = "0" ] && break
-  echo "$(date -u) slot used today ($used); sleeping until next UTC day"
-  sleep 900
+  # the competition allows only ONE pending submission per team (400 FAILED_PRECONDITION otherwise)
+  pending=$(k competitions submissions $COMP --page-size 20 --csv | grep -c PENDING)
+  [ "$used" = "0" ] && [ "$pending" = "0" ] && break
+  echo "$(date -u) used today=$used pending=$pending; waiting"
+  sleep 300
 done
 k competitions submit $COMP -k $SLUG -v $VER -f submission.parquet -m "$MSG"
 sleep 30
