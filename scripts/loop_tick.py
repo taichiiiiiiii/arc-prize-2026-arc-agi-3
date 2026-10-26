@@ -90,6 +90,13 @@ def append_log(row: dict) -> None:
                 f"{row['status'].split('.')[-1]} | {row.get('publicScore', '')} |\n")
 
 
+def _lock():
+    import fcntl
+    f = open(ROOT / "analysis" / ".loop.lock", "w")
+    fcntl.flock(f, fcntl.LOCK_EX)  # loop_tick and bench_loop both write analysis/loop_state.json
+    return f
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
@@ -155,4 +162,5 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    _lk = _lock()
     sys.exit(main())

@@ -1,0 +1,39 @@
+{
+ "comment": "Throughput loop (strategy.md 改善ループ). Rules fixed before results: decode gain > max(2*|base1-base2|, 4%) and levels >= min(base); ready shortening > max(2*|diff|, 120s).",
+ "benches": [
+  {
+   "name": "base1",
+   "opts": [],
+   "slug": "arc3-m2-bench10",
+   "status": "running",
+   "metric": "base"
+  },
+  {
+   "name": "base2",
+   "opts": [],
+   "slug": "arc3-m2-bench10",
+   "status": "pending",
+   "metric": "base"
+  },
+  {
+   "name": "c_precache8",
+   "opts": [
+    "precache8"
+   ],
+   "slug": "arc3-m2-bench10-pc8",
+   "status": "pending",
+   "metric": "ready"
+  },
+  {
+   "name": "c_spec4",
+   "opts": [
+    "spec4"
+   ],
+   "slug": "arc3-m2-bench10-sp4",
+   "status": "pending",
+   "metric": "decode"
+  }
+ ],
+ "adopted": [],
+ "decided": false
+}

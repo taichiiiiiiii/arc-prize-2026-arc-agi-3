@@ -107,15 +107,22 @@ print("m2-robust: keepalive patch applied", flush=True)
 '''
 
 
+# Behaviour-neutral throughput options (same decisions, faster): name -> (cell, old, new)
+OPTS = {
+    "precache8": (6, "kwargs={'delay': 60, 'threads': 3})", "kwargs={'delay': 60, 'threads': 8})"),
+    "spec4": (12, "    SPEC_STEPS=3,\n", "    SPEC_STEPS=4,\n"),
+}
+
+
 def replace_once(text: str, old: str, new: str, where: str) -> str:
     n = text.count(old)
     assert n == 1, f"{where}: anchor found {n} times: {old[:80]!r}"
     return text.replace(old, new)
 
 
-def build(variant: str = "robust") -> Path:
+def build(variant: str = "robust", opts: tuple[str, ...] = (), slug: str | None = None) -> Path:
     cfg = VARIANTS[variant]
-    slug, extra_cell, rgames, rmin = cfg["slug"], cfg["extra"], cfg["games"], cfg["minutes"]
+    slug, extra_cell, rgames, rmin = slug or cfg["slug"], cfg["extra"], cfg["games"], cfg["minutes"]
     kernel_id = f"taichiiiii/{slug}"
     nb = json.loads(SRC_NB.read_text())
     cells = nb["cells"]
@@ -175,6 +182,10 @@ if not TRUE_SUBMISSION:
                      "cell20 gateway")
     put(20, c)
 
+    for o in opts:  # behaviour-neutral throughput options, applied before the extra cell shifts indices
+        ci, old, new = OPTS[o]
+        put(ci, replace_once(src(ci), old, new, f"opt {o}"))
+
     # optional extra cell, inserted right after the customization hook (cell 16)
     if extra_cell is not None:
         cells.insert(17, {"cell_type": "code", "metadata": {}, "outputs": [], "execution_count": None,
@@ -186,7 +197,7 @@ if not TRUE_SUBMISSION:
             cell["outputs"] = []
             cell["execution_count"] = None
 
-    out = OUT / variant
+    out = OUT / (variant if slug == cfg["slug"] else slug)
     if out.exists():
         shutil.rmtree(out)
     out.mkdir(parents=True)
@@ -204,7 +215,12 @@ if not TRUE_SUBMISSION:
 
 
 if __name__ == "__main__":
-    import sys
+    import argparse
 
-    for v in sys.argv[1:] or ["robust"]:
-        build(v)
+    ap = argparse.ArgumentParser()
+    ap.add_argument("variants", nargs="*", default=["robust"])
+    ap.add_argument("--opts", default="", help="comma list of OPTS names")
+    ap.add_argument("--slug", default=None)
+    a = ap.parse_args()
+    for v in a.variants:
+        build(v, tuple(x for x in a.opts.split(",") if x), a.slug)
