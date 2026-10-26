@@ -5,14 +5,28 @@
    "name": "base1",
    "opts": [],
    "slug": "arc3-m2-bench10",
-   "status": "running",
-   "metric": "base"
+   "status": "done",
+   "metric": "base",
+   "metrics": {
+    "dir": "base1",
+    "weight_load_s": 754.99,
+    "ready_after_s": 975.0,
+    "decode_tok_s_ge8": 756.1,
+    "decode_samples": 1147,
+    "accept_len": 2.71,
+    "prefix_cached_share": 0.939,
+    "games": 10,
+    "harness_tokens": 1854950,
+    "levels": 51.0,
+    "actions": 1922,
+    "mean_score_public_subset": 67.6
+   }
   },
   {
    "name": "base2",
    "opts": [],
    "slug": "arc3-m2-bench10",
-   "status": "pending",
+   "status": "running",
    "metric": "base"
   },
   {
