@@ -29,12 +29,16 @@ ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / "third_party" / "dfranzen_m2"
 SRC_NB = SRC_DIR / "arc-agi-3-milestone-2-solution.ipynb"
 OUT = Path(__file__).resolve().parent / "out"
+BENCH10 = ["ar25", "bp35", "cd82", "ft09", "lp85", "ls20", "r11l", "sp80", "tr87", "vc33"]
 VARIANTS = {
-    # name: (kernel slug, extra cell file or None)
-    "robust": ("arc3-m2-robust", None),
-    "dprime": ("arc3-m2-robust-dprime", ROOT / "third_party" / "dprime_tantan0327" / "priority_form_cell.py"),
+    # name: kernel slug, extra cell, rehearsal games, rehearsal minutes per game
+    "robust": dict(slug="arc3-m2-robust", extra=None, games=["ls20", "ft09"], minutes=80),
+    "dprime": dict(slug="arc3-m2-robust-dprime",
+                   extra=ROOT / "third_party" / "dprime_tantan0327" / "priority_form_cell.py",
+                   games=["ls20", "ft09"], minutes=80),
+    # throughput bench: 10 streams busy like the scored run (tok/s, prefix cache, load time)
+    "bench10": dict(slug="arc3-m2-bench10", extra=None, games=BENCH10, minutes=75),
 }
-REHEARSAL_GAMES = ["ls20", "ft09"]
 ALL_PUBLIC = ["ar25", "bp35", "cd82", "cn04", "dc22", "ft09", "g50t", "ka59", "lf52", "lp85",
               "ls20", "m0r0", "r11l", "re86", "s5i5", "sb26", "sc25", "sk48", "sp80", "su15",
               "tn36", "tr87", "tu93", "vc33", "wa30"]
@@ -110,7 +114,8 @@ def replace_once(text: str, old: str, new: str, where: str) -> str:
 
 
 def build(variant: str = "robust") -> Path:
-    slug, extra_cell = VARIANTS[variant]
+    cfg = VARIANTS[variant]
+    slug, extra_cell, rgames, rmin = cfg["slug"], cfg["extra"], cfg["games"], cfg["minutes"]
     kernel_id = f"taichiiiii/{slug}"
     nb = json.loads(SRC_NB.read_text())
     cells = nb["cells"]
@@ -151,15 +156,15 @@ if not TRUE_SUBMISSION:
 
     # --- cell 16: rehearsal size (the TRUE_SUBMISSION branch is left as is) ---
     c = src(16)
-    excluded = [g for g in ALL_PUBLIC if g not in REHEARSAL_GAMES]
+    excluded = [g for g in ALL_PUBLIC if g not in rgames]
     c = replace_once(c, "demo_excluded_games = [] if TRUE_SUBMISSION else []\n",
                      f"demo_excluded_games = [] if TRUE_SUBMISSION else {excluded!r}  # m2-robust rehearsal\n",
                      "cell16 excluded")
     c = c.replace("# show config\n",
                   "if not TRUE_SUBMISSION:  # m2-robust rehearsal: short, proves start-up + actions\n"
                   "    bm.n_passes = 1\n"
-                  f"    bm.solver.concurrency = {len(REHEARSAL_GAMES)}\n"
-                  "    bm.solver.max_runtime_s_per_game = 80 * 60  # model load alone took 54 min on 2026-10-24\n\n# show config\n", 1)
+                  f"    bm.solver.concurrency = {len(rgames)}\n"
+                  f"    bm.solver.max_runtime_s_per_game = {rmin} * 60  # includes waiting for the model load\n\n# show config\n", 1)
     assert "m2-robust rehearsal: short" in c
     put(16, c)
 
