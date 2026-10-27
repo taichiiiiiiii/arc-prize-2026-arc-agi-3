@@ -3,7 +3,8 @@
  "reported": [
   "57603897",
   "57615876",
-  "57646304"
+  "57646304",
+  "57682179"
  ],
  "queue": [
   {
@@ -33,7 +34,9 @@
     "PRIORITY_FORM installed: form=dprime"
    ],
    "verify": "ok",
-   "verify_detail": "ft09 6/6 lv tok=72139, ls20 4/7 lv tok=237785"
+   "verify_detail": "ft09 6/6 lv tok=72139, ls20 4/7 lv tok=237785",
+   "state": "submitted",
+   "submitted_at": "2026-10-27T00:03:52.540606+00:00"
   },
   {
    "tag": "E5",
@@ -44,7 +47,9 @@
    "markers": [
     "m2-robust: keepalive patch applied",
     "taaf.kaggle: TRUE_SUBMISSION=False"
-   ]
+   ],
+   "verify": "ok",
+   "verify_detail": "ft09 4/6 lv tok=449150, ls20 4/7 lv tok=339785"
   },
   {
    "tag": "E6",

@@ -26,8 +26,22 @@
    "name": "base2",
    "opts": [],
    "slug": "arc3-m2-bench10",
-   "status": "running",
-   "metric": "base"
+   "status": "done",
+   "metric": "base",
+   "metrics": {
+    "dir": "base2",
+    "weight_load_s": 613.33,
+    "ready_after_s": 825.0,
+    "decode_tok_s_ge8": 754.7,
+    "decode_samples": 1302,
+    "accept_len": 2.69,
+    "prefix_cached_share": 0.937,
+    "games": 10,
+    "harness_tokens": 1983040,
+    "levels": 56.0,
+    "actions": 2066,
+    "mean_score_public_subset": 73.61
+   }
   },
   {
    "name": "c_precache8",
@@ -35,8 +49,22 @@
     "precache8"
    ],
    "slug": "arc3-m2-bench10-pc8",
-   "status": "pending",
-   "metric": "ready"
+   "status": "done",
+   "metric": "ready",
+   "metrics": {
+    "dir": "c_precache8",
+    "weight_load_s": 318.11,
+    "ready_after_s": 523.0,
+    "decode_tok_s_ge8": 755.1,
+    "decode_samples": 1369,
+    "accept_len": 2.7,
+    "prefix_cached_share": 0.939,
+    "games": 10,
+    "harness_tokens": 2205255,
+    "levels": 53.0,
+    "actions": 2014,
+    "mean_score_public_subset": 64.79
+   }
   },
   {
    "name": "c_spec4",
@@ -44,7 +72,7 @@
     "spec4"
    ],
    "slug": "arc3-m2-bench10-sp4",
-   "status": "pending",
+   "status": "running",
    "metric": "decode"
   }
  ],
