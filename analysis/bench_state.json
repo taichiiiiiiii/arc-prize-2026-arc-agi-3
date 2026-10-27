@@ -111,5 +111,6 @@
    ]
   }
  ],
- "hold_notified": true
+ "hold_notified": true,
+ "smoke_notified": true
 }

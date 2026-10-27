@@ -37,7 +37,7 @@ VARIANTS = {
                    extra=ROOT / "third_party" / "dprime_tantan0327" / "priority_form_cell.py",
                    games=["ls20", "ft09"], minutes=80),
     # throughput bench: 10 streams busy like the scored run (tok/s, prefix cache, load time)
-    "bench10": dict(slug="arc3-m2-bench10", extra=None, games=BENCH10, minutes=75),
+    "bench10": dict(slug="arc3-m2-bench10", extra=None, games=BENCH10, minutes=75, watchdog=True),
 }
 ALL_PUBLIC = ["ar25", "bp35", "cd82", "cn04", "dc22", "ft09", "g50t", "ka59", "lf52", "lp85",
               "ls20", "m0r0", "r11l", "re86", "s5i5", "sb26", "sc25", "sk48", "sp80", "su15",
@@ -106,6 +106,20 @@ compile(_s, str(_solver_py), "exec")
 print("m2-robust: keepalive patch applied", flush=True)
 '''
 
+
+# Bench-only: stop the notebook when the model server dies, so a broken option does not burn GPU
+# quota for the rest of the run (c_spec4 kept running 75 min with a dead server on 2026-10-26).
+WATCHDOG = """
+
+# [bench watchdog] interrupt the run if the SGLang process exits
+import _thread, threading
+def _server_watchdog():
+    while proc.poll() is None:
+        time.sleep(15)
+    print(f"[bench watchdog] model server exited with {proc.returncode}; aborting the run", flush=True)
+    _thread.interrupt_main()
+threading.Thread(target=_server_watchdog, daemon=True).start()
+"""
 
 # Behaviour-neutral throughput options (same decisions, faster): name -> (cell, old, new)
 OPTS = {
@@ -182,6 +196,9 @@ if not TRUE_SUBMISSION:
                      "cell20 gateway")
     put(20, c)
 
+    if cfg.get("watchdog"):
+        assert "proc = subprocess.Popen(args" in src(12), "launcher cell moved"
+        put(12, src(12) + WATCHDOG)
     for o in opts:  # behaviour-neutral throughput options, applied before the extra cell shifts indices
         ci, old, new = OPTS[o]
         put(ci, replace_once(src(ci), old, new, f"opt {o}"))
