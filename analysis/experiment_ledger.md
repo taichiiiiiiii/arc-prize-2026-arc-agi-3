@@ -99,6 +99,15 @@
 - spec4（投機的デコード 3→4 段）: SGLang が起動時に失敗（`Qwen QSA requires speculative_num_draft_tokens <= 4`）→ 実行不良で不採用。M2 の SPEC_STEPS=3 は上限。ベンチはサーバ死亡後も 75 分走り GPU を浪費した。
 - GPU 週間クォータが 0h（30.12/30h、リセット 10/31 00:00 UTC）のため、A/B への昇格の試走は保留。提出（採点の再実行）はクォータを消費しないので、計画どおり既存版で続ける。
 
+### N3 手元での記録分析: GPU 時間とトークンの行き先（2026-10-28、GPU 不使用）
+- 材料: bench10 の base2・precache8 の要求ログ（20 ゲーム、`scripts/transcript_report.py`）と SGLang の ReqTimeStats（base1/base2/precache8）。
+- 事前予想: 「履歴の刈り込み（drain）で prefix cache が切れ、再 prefill が大きな無駄になっている」。
+- 結果:
+  - 未キャッシュの入力トークンの 45% は 4% の要求（drain 直後、1 回 約 55k トークン）に集中する。ただしサーバ側の時間では prefill 全体が 2%（505 s / 24,351 s）、drain 分は 0.7% にすぎない（prefill 約 11,900 tok/s）。→ **予想は外れ。drain の改良は効果が小さいので行わない**。
+  - サーバ内にいる時間は 1 ゲームのプレイ時間の約 66%。残りはハーネス側（python ツール実行・ゲーム操作・記録）。試走は要求ログ保存が有効なので本番より膨らんでいる可能性がある（推測）。
+  - python ツールの失敗は 2,040 回中 217 回（10.6%）。多い順に NameError 55（前の呼び出しの変数が残らない）、StaleStateActionError 25（ガードが意図どおり止めたもの）、KeyError 23、ValueError 21、TypeError 20、ImportError 11（`time` などが禁止）。1 回の失敗で 1 ターン（約 2k トークン）を失う。
+- 判断: 変数の持ち越しや import 許可はモデルの判断を変える変更で、点数で測れない（1 回 ±5）ので入れない。手元の分析で見つかった「判断不変の改善」は precache8 だけ。
+
 ---
 
 ## 撤回した結論

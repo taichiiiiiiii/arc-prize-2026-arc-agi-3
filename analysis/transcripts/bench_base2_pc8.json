@@ -1,0 +1,843 @@
+{
+ "base2/ar25-0c556536": {
+  "turns": 91,
+  "completion_tok": 126473,
+  "reasoning_tok": 105863,
+  "prompt_tok": 6397141,
+  "cached_share": 0.956,
+  "finish": {
+   "tool_calls": 91
+  },
+  "tool_results": 90,
+  "tool_rc_nonzero": 9,
+  "top_errors": [
+   [
+    "ImportError",
+    2
+   ],
+   [
+    "NameError",
+    2
+   ],
+   [
+    "KeyError",
+    1
+   ],
+   [
+    "StaleStateActionError",
+    1
+   ],
+   [
+    "IndexError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 6, in <module>\nKeyError: 'action'",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nImportError: Module 'time' is not allowed in the sandbox.",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 16, in <module>\n  File \"<python_tool>\", line 8, in umap\nIndexError: string index out of range",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 9, in <module>\n  File \"<python_tool>\", line 4, in kind\nAttributeError: 'str' object has no attribute 'get'",
+   "other": "Tool timed out after 30s",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 10, in <module>\n  File \"<python_tool>\", line 4, in sel\nNameError: name 'selinfo' is not defined"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 2,
+  "share_tokens_in_failed_tool_turns": 0.128
+ },
+ "base2/bp35-0a0ad940": {
+  "turns": 115,
+  "completion_tok": 275601,
+  "reasoning_tok": 255561,
+  "prompt_tok": 8652857,
+  "cached_share": 0.927,
+  "finish": {
+   "tool_calls": 114,
+   "length": 1
+  },
+  "tool_results": 115,
+  "tool_rc_nonzero": 10,
+  "top_errors": [
+   [
+    "ValueError",
+    7
+   ],
+   [
+    "NameError",
+    1
+   ],
+   [
+    "other",
+    1
+   ],
+   [
+    "StaleStateActionError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nNameError: name 'prev' is not defined",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nValueError: min() iterable argument is empty",
+   "other": "Python syntax error: invalid syntax (<python_tool>, line 6)",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.185
+ },
+ "base2/cd82-fb555c5d": {
+  "turns": 85,
+  "completion_tok": 147319,
+  "reasoning_tok": 134696,
+  "prompt_tok": 5697407,
+  "cached_share": 0.939,
+  "finish": {
+   "tool_calls": 85
+  },
+  "tool_results": 84,
+  "tool_rc_nonzero": 8,
+  "top_errors": [
+   [
+    "AttributeError",
+    4
+   ],
+   [
+    "StaleStateActionError",
+    3
+   ],
+   [
+    "NameError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nAttributeError: '_LazyAnimation' object has no attribute 'items'",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 20, in <module>\nNameError: name 'itertools' is not defined",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.077
+ },
+ "base2/ft09-0d8bbf25": {
+  "turns": 86,
+  "completion_tok": 209049,
+  "reasoning_tok": 183918,
+  "prompt_tok": 6351656,
+  "cached_share": 0.935,
+  "finish": {
+   "tool_calls": 86
+  },
+  "tool_results": 85,
+  "tool_rc_nonzero": 7,
+  "top_errors": [
+   [
+    "other",
+    2
+   ],
+   [
+    "AttributeError",
+    2
+   ],
+   [
+    "KeyError",
+    1
+   ],
+   [
+    "StaleStateActionError",
+    1
+   ],
+   [
+    "IndexError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "other": "Python syntax error: unterminated string literal (detected at line 5) (<python_tool>, line 5)",
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 27, in <module>\n  File \"<python_tool>\", line 25, in target3\nKeyError: 'G'",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 22, in <module>\nAttributeError: 'TransitionView' object has no attribute 'step'",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 16, in <module>\n  File \"<python_tool>\", line 6, in kind\n  File \"<python_tool>\", line 3, in blocks\nIndexError: string index out of range"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.14
+ },
+ "base2/lp85-305b61c3": {
+  "turns": 58,
+  "completion_tok": 120034,
+  "reasoning_tok": 100371,
+  "prompt_tok": 3913479,
+  "cached_share": 0.934,
+  "finish": {
+   "tool_calls": 56,
+   "length": 2
+  },
+  "tool_results": 56,
+  "tool_rc_nonzero": 5,
+  "top_errors": [
+   [
+    "NameError",
+    2
+   ],
+   [
+    "IndexError",
+    1
+   ],
+   [
+    "other",
+    1
+   ],
+   [
+    "KeyError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nNameError: name 'P' is not defined",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 46, in <module>\n  File \"<python_tool>\", line 38, in run6\n  File \"<python_tool>\", line 10, in toks\nIndexError: list index out of range",
+   "other": "Python syntax error: '(' was never closed (<python_tool>, line 5)",
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 42, in <module>\n  File \"<python_tool>\", line 26, in solve8\nKeyError: (39, 36)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.148
+ },
+ "base2/ls20-9607627b": {
+  "turns": 119,
+  "completion_tok": 267682,
+  "reasoning_tok": 236181,
+  "prompt_tok": 8818331,
+  "cached_share": 0.939,
+  "finish": {
+   "tool_calls": 118,
+   "length": 1
+  },
+  "tool_results": 117,
+  "tool_rc_nonzero": 14,
+  "top_errors": [
+   [
+    "NameError",
+    8
+   ],
+   [
+    "TypeError",
+    4
+   ],
+   [
+    "KeyError",
+    1
+   ],
+   [
+    "AttributeError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nKeyError: 'steps'",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 13, in <module>\n  File \"<python_tool>\", line 13, in <genexpr>\nNameError: name 'dr' is not defined",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 5, in <module>\nTypeError: sequence item 0: expected str instance, tuple found",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 9, in <module>\nAttributeError: 'TransitionView' object has no attribute 'level'"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 4,
+  "share_tokens_in_failed_tool_turns": 0.144
+ },
+ "base2/r11l-495a7899": {
+  "turns": 99,
+  "completion_tok": 147435,
+  "reasoning_tok": 112806,
+  "prompt_tok": 7391513,
+  "cached_share": 0.949,
+  "finish": {
+   "tool_calls": 99
+  },
+  "tool_results": 98,
+  "tool_rc_nonzero": 7,
+  "top_errors": [
+   [
+    "NameError",
+    2
+   ],
+   [
+    "ImportError",
+    1
+   ],
+   [
+    "other",
+    1
+   ],
+   [
+    "TypeError",
+    1
+   ],
+   [
+    "ValueError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nImportError: Module 'time' is not allowed in the sandbox.",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nNameError: name 'pth' is not defined",
+   "other": "Tool timed out after 30s",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 45, in <module>\nTypeError: 'NoneType' object is not iterable",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 12, in <module>\n  File \"<python_tool>\", line 9, in obs_mask\nValueError: not enough values to unpack (expected 2, got 1)",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 18,
+  "share_tokens_in_failed_tool_turns": 0.037
+ },
+ "base2/sp80-589a99af": {
+  "turns": 129,
+  "completion_tok": 279506,
+  "reasoning_tok": 249215,
+  "prompt_tok": 9440186,
+  "cached_share": 0.933,
+  "finish": {
+   "tool_calls": 127,
+   "length": 2
+  },
+  "tool_results": 126,
+  "tool_rc_nonzero": 10,
+  "top_errors": [
+   [
+    "NameError",
+    4
+   ],
+   [
+    "StaleStateActionError",
+    4
+   ],
+   [
+    "TypeError",
+    2
+   ]
+  ],
+  "error_samples": {
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nNameError: name 'fr' is not defined",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 53, in <module>\n  File \"<python_tool>\", line 19, in simulate\n  File \"<python_tool>\", line 5, in ov\nTypeError: 'int' object is not subscriptable",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.083
+ },
+ "base2/tr87-cd924810": {
+  "turns": 91,
+  "completion_tok": 165532,
+  "reasoning_tok": 128983,
+  "prompt_tok": 6482894,
+  "cached_share": 0.941,
+  "finish": {
+   "tool_calls": 91
+  },
+  "tool_results": 90,
+  "tool_rc_nonzero": 18,
+  "top_errors": [
+   [
+    "NameError",
+    5
+   ],
+   [
+    "TerminalStateActionError",
+    5
+   ],
+   [
+    "TypeError",
+    2
+   ],
+   [
+    "KeyError",
+    2
+   ],
+   [
+    "IndexError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 18, in <module>\nNameError: name 'tops' is not defined",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 16, in <module>\n  File \"<python_tool>\", line 7, in ops\n  File \"<python_tool>\", line 7, in <genexpr>\nTypeError: unsupported operand type(s) for |: 'str' and 'str'",
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 25, in <module>\nKeyError: 'id'",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 8, in <module>\nIndexError: string index out of range",
+   "TerminalStateActionError": " File \"<python_tool>\", line 25, in <module>\n  File \"<python_tool>\", line 18, in run\nTerminalStateActionError: the previous action reported level_completed. A new level has been loaded, so the board you planned against is gone and this action was not executed. The next turn begins from the new state.",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 11, in <module>\nValueError: 8 is not in list",
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 28, in <module>\nImportError: Module 'builtins' is not allowed in the sandbox.",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 21, in <module>\nAttributeError: 'list' object has no attribute 'keys'"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 1,
+  "share_tokens_in_failed_tool_turns": 0.208
+ },
+ "base2/vc33-5430563c": {
+  "turns": 110,
+  "completion_tok": 270428,
+  "reasoning_tok": 245852,
+  "prompt_tok": 7837086,
+  "cached_share": 0.928,
+  "finish": {
+   "tool_calls": 107,
+   "length": 3
+  },
+  "tool_results": 107,
+  "tool_rc_nonzero": 2,
+  "top_errors": [
+   [
+    "StaleStateActionError",
+    1
+   ],
+   [
+    "other",
+    1
+   ]
+  ],
+  "error_samples": {
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "other": "Python syntax error: assignment expression cannot be used in a comprehension iterable expression (<python_tool>, line 2)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.013
+ },
+ "pc8/ar25-0c556536": {
+  "turns": 88,
+  "completion_tok": 119964,
+  "reasoning_tok": 96205,
+  "prompt_tok": 6421947,
+  "cached_share": 0.954,
+  "finish": {
+   "tool_calls": 88
+  },
+  "tool_results": 87,
+  "tool_rc_nonzero": 6,
+  "top_errors": [
+   [
+    "StaleStateActionError",
+    2
+   ],
+   [
+    "NameError",
+    1
+   ],
+   [
+    "ValueError",
+    1
+   ],
+   [
+    "ImportError",
+    1
+   ],
+   [
+    "other",
+    1
+   ]
+  ],
+  "error_samples": {
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 4, in <module>\nNameError: name 'G' is not defined",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 5, in <module>\n  File \"<python_tool>\", line 5, in <genexpr>\nValueError: too many values to unpack (expected 2)",
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 7, in <module>\nImportError: Module 'time' is not allowed in the sandbox.",
+   "other": "Tool timed out after 30s"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 1,
+  "share_tokens_in_failed_tool_turns": 0.088
+ },
+ "pc8/bp35-0a0ad940": {
+  "turns": 101,
+  "completion_tok": 282923,
+  "reasoning_tok": 268075,
+  "prompt_tok": 7808852,
+  "cached_share": 0.923,
+  "finish": {
+   "tool_calls": 98,
+   "length": 3
+  },
+  "tool_results": 98,
+  "tool_rc_nonzero": 5,
+  "top_errors": [
+   [
+    "NameError",
+    2
+   ],
+   [
+    "TypeError",
+    2
+   ],
+   [
+    "IndexError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 1, in <module>\nNameError: name 'tl' is not defined",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 5, in <module>\nIndexError: list index out of range",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 5, in <module>\nTypeError: object of type 'int' has no len()"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.026
+ },
+ "pc8/cd82-fb555c5d": {
+  "turns": 151,
+  "completion_tok": 250422,
+  "reasoning_tok": 227214,
+  "prompt_tok": 10683703,
+  "cached_share": 0.942,
+  "finish": {
+   "tool_calls": 150,
+   "length": 1
+  },
+  "tool_results": 149,
+  "tool_rc_nonzero": 13,
+  "top_errors": [
+   [
+    "StaleStateActionError",
+    7
+   ],
+   [
+    "AttributeError",
+    3
+   ],
+   [
+    "KeyError",
+    2
+   ],
+   [
+    "TypeError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nKeyError: 'action'",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 4, in <module>\nAttributeError: '_LazyAnimation' object has no attribute 'items'",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 5, in <module>\n  File \"<python_tool>\", line 5, in <genexpr>\nTypeError: list indices must be integers or slices, not tuple"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.104
+ },
+ "pc8/ft09-0d8bbf25": {
+  "turns": 91,
+  "completion_tok": 239007,
+  "reasoning_tok": 208748,
+  "prompt_tok": 6722827,
+  "cached_share": 0.93,
+  "finish": {
+   "tool_calls": 89,
+   "length": 2
+  },
+  "tool_results": 88,
+  "tool_rc_nonzero": 7,
+  "top_errors": [
+   [
+    "NameError",
+    2
+   ],
+   [
+    "KeyError",
+    1
+   ],
+   [
+    "TypeError",
+    1
+   ],
+   [
+    "AttributeError",
+    1
+   ],
+   [
+    "StaleStateActionError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nKeyError: 'action_trace'",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 8, in <module>\nTypeError: 'set' object is not subscriptable",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 6, in <module>\nAttributeError: 'HistoryEntryView' object has no attribute 'step'",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 25, in <module>\nNameError: name 'open' is not defined",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 10, in <module>\nValueError: min() iterable argument is empty"
+  },
+  "action_noexec": 1,
+  "guard_msgs": 1,
+  "share_tokens_in_failed_tool_turns": 0.053
+ },
+ "pc8/lp85-305b61c3": {
+  "turns": 112,
+  "completion_tok": 169060,
+  "reasoning_tok": 126436,
+  "prompt_tok": 8662194,
+  "cached_share": 0.952,
+  "finish": {
+   "tool_calls": 112
+  },
+  "tool_results": 111,
+  "tool_rc_nonzero": 18,
+  "top_errors": [
+   [
+    "KeyError",
+    10
+   ],
+   [
+    "NameError",
+    3
+   ],
+   [
+    "TypeError",
+    2
+   ],
+   [
+    "ImportError",
+    1
+   ],
+   [
+    "IndexError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 53, in <module>\n  File \"<python_tool>\", line 43, in solve_pairs\n  File \"<python_tool>\", line 33, in apply_pair\n  File \"<python_tool>\", line 21, in perm_from_moves\nKeyError: (35, 32)",
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 9, in <module>\nImportError: Module 'sys' is not allowed in the sandbox.",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 20, in <module>\nNameError: name 'open' is not defined",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 25, in <module>\nTypeError: unhashable type: 'list'",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 4, in <module>\nIndexError: list index out of range",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 1,
+  "share_tokens_in_failed_tool_turns": 0.17
+ },
+ "pc8/ls20-9607627b": {
+  "turns": 166,
+  "completion_tok": 273569,
+  "reasoning_tok": 235028,
+  "prompt_tok": 12929227,
+  "cached_share": 0.952,
+  "finish": {
+   "tool_calls": 166
+  },
+  "tool_results": 165,
+  "tool_rc_nonzero": 19,
+  "top_errors": [
+   [
+    "NameError",
+    7
+   ],
+   [
+    "ValueError",
+    4
+   ],
+   [
+    "KeyError",
+    2
+   ],
+   [
+    "AttributeError",
+    2
+   ],
+   [
+    "TypeError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nTypeError: cannot unpack non-iterable NoneType object",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 4, in <module>\nNameError: name 'bfs' is not defined",
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 20, in <module>\n  File \"<python_tool>\", line 14, in validate\nKeyError: 'UPRIGHTUPUPUPUPUPRIGHTRIGHTDOWNRIGHTDOWNDOWNDOWNDOWNDOWNDOWNDOWNLEFTLEFT'",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 10, in <module>\nAttributeError: 'list' object has no attribute 'segmentation'",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 15, in <module>\n  File \"<python_tool>\", line 9, in wcells\nValueError: not enough values to unpack (expected 2, got 1)",
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 1, in <module>\nImportError: Module 'inspect' is not allowed in the sandbox.",
+   "other": "python requires a non-empty `code` string.",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)"
+  },
+  "action_noexec": 2,
+  "guard_msgs": 2,
+  "share_tokens_in_failed_tool_turns": 0.145
+ },
+ "pc8/r11l-495a7899": {
+  "turns": 90,
+  "completion_tok": 212919,
+  "reasoning_tok": 154516,
+  "prompt_tok": 6850513,
+  "cached_share": 0.93,
+  "finish": {
+   "tool_calls": 90
+  },
+  "tool_results": 89,
+  "tool_rc_nonzero": 14,
+  "top_errors": [
+   [
+    "ImportError",
+    3
+   ],
+   [
+    "NameError",
+    3
+   ],
+   [
+    "IndexError",
+    2
+   ],
+   [
+    "other",
+    2
+   ],
+   [
+    "AssertionError",
+    2
+   ]
+  ],
+  "error_samples": {
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nImportError: Module 'time' is not allowed in the sandbox.",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 4, in <module>\n  File \"<python_tool>\", line 4, in <genexpr>\nIndexError: list index out of range",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 14, in <module>\nNameError: name 'open' is not defined",
+   "other": "python requires a non-empty `code` string.",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 20, in <module>\nAttributeError: module 'random' has no attribute 'permutation'",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 73, in <module>\nTypeError: unsupported operand type(s) for &: 'int' and 'tuple'",
+   "AssertionError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 87, in <module>\n  File \"<python_tool>\", line 76, in sim\nAssertionError: (0, 'S', (43, 49), [0], [0])"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 3,
+  "share_tokens_in_failed_tool_turns": 0.174
+ },
+ "pc8/sp80-589a99af": {
+  "turns": 112,
+  "completion_tok": 287498,
+  "reasoning_tok": 245529,
+  "prompt_tok": 8636260,
+  "cached_share": 0.937,
+  "finish": {
+   "tool_calls": 112
+  },
+  "tool_results": 112,
+  "tool_rc_nonzero": 15,
+  "top_errors": [
+   [
+    "TypeError",
+    3
+   ],
+   [
+    "ImportError",
+    3
+   ],
+   [
+    "IndexError",
+    2
+   ],
+   [
+    "NameError",
+    2
+   ],
+   [
+    "ValueError",
+    2
+   ]
+  ],
+  "error_samples": {
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nKeyError: 'steps'",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 3, in <module>\nIndexError: list index out of range",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 34, in <module>\nTypeError: '<' not supported between instances of 'dict' and 'dict'",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 5, in <module>\nNameError: name 'cands' is not defined",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 8, in <module>\nValueError: too many values to unpack (expected 3)",
+   "ImportError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 1, in <module>\nImportError: Module 'time' is not allowed in the sandbox.",
+   "other": "Tool timed out after 30s"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 3,
+  "share_tokens_in_failed_tool_turns": 0.159
+ },
+ "pc8/tr87-cd924810": {
+  "turns": 78,
+  "completion_tok": 120371,
+  "reasoning_tok": 87961,
+  "prompt_tok": 5449016,
+  "cached_share": 0.949,
+  "finish": {
+   "tool_calls": 78
+  },
+  "tool_results": 77,
+  "tool_rc_nonzero": 22,
+  "top_errors": [
+   [
+    "NameError",
+    9
+   ],
+   [
+    "ValueError",
+    6
+   ],
+   [
+    "IndexError",
+    3
+   ],
+   [
+    "KeyError",
+    2
+   ],
+   [
+    "other",
+    1
+   ]
+  ],
+  "error_samples": {
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 41, in <module>\n  File \"<python_tool>\", line 27, in state_of\nNameError: name 'p' is not defined",
+   "ValueError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 13, in <module>\nValueError: ('##.', '.##') is not in list",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 31, in <module>\n  File \"<python_tool>\", line 31, in <genexpr>\nIndexError: list index out of range",
+   "other": "python requires a non-empty `code` string.",
+   "KeyError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 14, in <module>\n  File \"<python_tool>\", line 7, in bids\nKeyError: ('###..', '..#..', '.###.', '..#..', '..###')",
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 8, in <module>\nTypeError: list indices must be integers or slices, not tuple"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.24
+ },
+ "pc8/vc33-5430563c": {
+  "turns": 99,
+  "completion_tok": 286152,
+  "reasoning_tok": 268241,
+  "prompt_tok": 7188756,
+  "cached_share": 0.918,
+  "finish": {
+   "tool_calls": 97,
+   "length": 2
+  },
+  "tool_results": 96,
+  "tool_rc_nonzero": 8,
+  "top_errors": [
+   [
+    "StaleStateActionError",
+    4
+   ],
+   [
+    "TypeError",
+    1
+   ],
+   [
+    "IndexError",
+    1
+   ],
+   [
+    "AttributeError",
+    1
+   ],
+   [
+    "NameError",
+    1
+   ]
+  ],
+  "error_samples": {
+   "TypeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 19, in <module>\nTypeError: unsupported operand type(s) for +: 'int' and 'NoneType'",
+   "StaleStateActionError": "sitions and paths computed since then may be wrong, which is why execution has been halted here. Re-read current_frame and last_action_call_result, work out why nothing moved, then act on what you find. (StaleStateActionError can be caught if a snippet has good reason to keep acting through no-ops.)",
+   "IndexError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 2, in <module>\nIndexError: list index out of range",
+   "AttributeError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 7, in <module>\nAttributeError: 'TransitionView' object has no attribute 'step'",
+   "NameError": "Traceback (most recent call last):\n  File \"<python_tool>\", line 1, in <module>\nNameError: name 'plan' is not defined"
+  },
+  "action_noexec": 0,
+  "guard_msgs": 0,
+  "share_tokens_in_failed_tool_turns": 0.098
+ }
+}

@@ -44,15 +44,31 @@ def sample(schema: dict, name: str = ""):
     return RNG.choice(ACTIONS) if "action" in name.lower() else "x"
 
 
-def pick_call(tools: list[dict]) -> tuple[str, dict]:
+VALID = __import__("re").compile(r"valid_actions['\"]?:\s*\[([^\]]*)\]")
+
+
+def valid_actions(messages: list[dict]) -> list[str]:
+    """Action names the game currently accepts, read from the newest tool output that lists them."""
+    for m in reversed(messages or []):
+        hit = VALID.findall(str(m.get("content")))
+        if hit:
+            names = [x.strip().strip("'\"") for x in hit[-1].split(",") if x.strip()]
+            names = [n for n in names if n and n not in ("RESET", "MOUSE", "CLICK")]
+            if names:
+                return names
+    return ACTIONS
+
+
+def pick_call(tools: list[dict], messages: list[dict] | None = None) -> tuple[str, dict]:
     """Prefer a python/code tool (send a few real actions), else any action-like tool."""
+    acts_pool = valid_actions(messages or [])
     fns = [t.get("function", t) for t in tools or []]
     names = [f.get("name", "") for f in fns]
     for f in fns:
         props = (f.get("parameters") or {}).get("properties", {})
         code_key = next((k for k in props if k in ("code", "source", "python")), None)
         if code_key:
-            acts = ", ".join(repr(RNG.choice(ACTIONS)) for _ in range(3))
+            acts = ", ".join(repr(RNG.choice(acts_pool)) for _ in range(3))
             return f["name"], {code_key: f"print(action([{acts}]))"}
     for f in fns:
         if "action" in f.get("name", "").lower():
@@ -96,7 +112,7 @@ class H(BaseHTTPRequestHandler):
             return self.send(404, {"error": self.path})
         i = next(COUNTER)
         try:
-            name, args = pick_call(req.get("tools") or [])
+            name, args = pick_call(req.get("tools") or [], req.get("messages"))
             err = None
         except Exception as e:  # noqa: BLE001
             name, args, err = None, None, repr(e)

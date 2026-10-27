@@ -204,6 +204,14 @@ def main() -> int:
                 p["status"] = "failed"
                 msgs.append(f"昇格失敗 {p['slug']}: {detail} → 提出計画は元のまま")
         if p["status"] == "pending":
+            smoke = ROOT / "analysis" / "smoke" / f"{p['variant']}-{'-'.join(sorted(state['adopted']))}.json"
+            res = json.loads(smoke.read_text()) if smoke.exists() else {}
+            if not (res.get("ok") and sorted(res.get("opts", [])) == sorted(state["adopted"])):
+                if not state.get("smoke_notified"):
+                    msgs.append(f"昇格保留: 手元の通しテスト未合格 ({smoke.name})。"
+                                f"`scripts/local_smoke.py {p['variant']} --opts {','.join(state['adopted'])} --result {smoke}`")
+                    state["smoke_notified"] = True
+                break
             out = push(p["variant"], state["adopted"], p["slug"])
             if out.startswith("GPU_QUOTA_HOLD"):
                 if not state.get("hold_notified"):

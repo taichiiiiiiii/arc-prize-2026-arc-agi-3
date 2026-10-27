@@ -66,8 +66,9 @@ def sandbox() -> Path:
     return k
 
 
-def prepare(variant: str, games: list[str], minutes: float, ready_after: float, k: Path, log: Path) -> dict:
-    out = nbbuild.build(variant)
+def prepare(variant: str, games: list[str], minutes: float, ready_after: float, k: Path, log: Path,
+            opts: tuple[str, ...] = ()) -> dict:
+    out = nbbuild.build(variant, opts, f"smoke-{variant}" if opts else None)
     nb = json.loads(out.read_text())
     seen = set()
     for c in nb["cells"]:
@@ -102,6 +103,8 @@ def prepare(variant: str, games: list[str], minutes: float, ready_after: float, 
         if tag != "writefile":  # its path is already redirected; the body is data
             s = s.replace("/kaggle/", f"{k}/")
         c["source"] = s
+    if "precache8" in opts:  # the precache cell is skipped locally; at least check the option landed
+        assert any("'threads': 8}" in "".join(c["source"]) for c in json.loads(out.read_text())["cells"]), "precache8 not in build"
     missing = {"writefile", "pip", "precache", "launcher", "config"} - seen
     assert not missing, f"cells not found: {missing}"
     return nb
@@ -111,8 +114,10 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("variant", nargs="?", default="robust")
     ap.add_argument("--games", default="ls20")
-    ap.add_argument("--minutes", type=float, default=4)
-    ap.add_argument("--ready-after", type=float, default=150, help="mock 'model load' seconds")
+    ap.add_argument("--minutes", type=float, default=9)
+    ap.add_argument("--ready-after", type=float, default=420, help="mock 'model load' seconds")
+    ap.add_argument("--opts", default="", help="comma list of build.py OPTS (e.g. precache8)")
+    ap.add_argument("--result", default=None, help="write the check results as JSON here")
     a = ap.parse_args()
     games = a.games.split(",")
 
@@ -122,7 +127,8 @@ def main() -> int:
     k = sandbox()
     log = SMOKE / f"mock_{a.variant}.jsonl"
     log.unlink(missing_ok=True)
-    nb = nbformat.from_dict(prepare(a.variant, games, a.minutes, a.ready_after, k, log))
+    opts = tuple(x for x in a.opts.split(",") if x)
+    nb = nbformat.from_dict(prepare(a.variant, games, a.minutes, a.ready_after, k, log, opts))
     pth = Path(sysconfig.get_paths()["purelib"]) / "taaf_kaggle_sources.pth"
     env_keep = dict(os.environ)
     os.environ.pop("KAGGLE_IS_COMPETITION_RERUN", None)
@@ -170,6 +176,11 @@ def main() -> int:
         print(f"  {g[0]}: levels={g[2]}/{g[3]} actions={g[4]} tokens={g[5]}")
     for name, ok in checks.items():
         print(f"  [{'ok' if ok else 'NG'}] {name}")
+    if a.result:
+        Path(a.result).write_text(json.dumps({"variant": a.variant, "opts": list(opts), "ok": all(checks.values()),
+                                              "checks": checks, "requests": len(reqs),
+                                              "actions": sum(int(g[4]) for g in found.values()),
+                                              "at": time.strftime("%Y-%m-%dT%H:%M:%S")}, indent=1))
     return 0 if all(checks.values()) else 1
 
 
