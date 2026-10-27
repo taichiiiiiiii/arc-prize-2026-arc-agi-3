@@ -72,10 +72,44 @@
     "spec4"
    ],
    "slug": "arc3-m2-bench10-sp4",
-   "status": "running",
-   "metric": "decode"
+   "status": "done",
+   "metric": "decode",
+   "metrics": {
+    "dir": "c_spec4",
+    "weight_load_s": 1316.86,
+    "decode_tok_s_ge8": null,
+    "decode_samples": 0,
+    "accept_len": null,
+    "prefix_cached_share": null,
+    "games": 10,
+    "harness_tokens": 0,
+    "levels": 0.0,
+    "actions": 19,
+    "mean_score_public_subset": 0.0
+   }
   }
  ],
- "adopted": [],
- "decided": false
+ "adopted": [
+  "precache8"
+ ],
+ "decided": true,
+ "promote": [
+  {
+   "variant": "robust",
+   "slug": "arc3-m2-robust-opt",
+   "config": "A=",
+   "status": "pending",
+   "markers": []
+  },
+  {
+   "variant": "dprime",
+   "slug": "arc3-m2-robust-dprime-opt",
+   "config": "B=",
+   "status": "pending",
+   "markers": [
+    "PRIORITY_FORM installed: form=dprime"
+   ]
+  }
+ ],
+ "hold_notified": true
 }

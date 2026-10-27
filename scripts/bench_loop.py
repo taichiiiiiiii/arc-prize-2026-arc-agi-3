@@ -35,7 +35,25 @@ def sh(*args: str, timeout: int = 600) -> str:
     return r.stdout + r.stderr
 
 
+def gpu_hours_left() -> float:
+    """Weekly GPU quota left (`kaggle quota`); scored reruns of submissions do not use it."""
+    out = loop_tick.kaggle("quota")
+    for line in out.splitlines():
+        if line.startswith("GPU"):
+            try:
+                return float(line.split()[2].rstrip("h"))
+            except (IndexError, ValueError):
+                break
+    return 0.0
+
+
+MIN_GPU_HOURS = 2.0  # one bench10 / rehearsal run is ~1.5 h
+
+
 def push(variant: str, opts: list[str], slug: str) -> str:
+    left = gpu_hours_left()
+    if left < MIN_GPU_HOURS:
+        return f"GPU_QUOTA_HOLD: {left:.2f}h left < {MIN_GPU_HOURS}h"
     sh(PY, str(BUILD), variant, "--opts", ",".join(opts), "--slug", slug)
     src = ROOT / "kernels" / "m2_robust" / "out" / slug
     if not src.exists():  # default slug builds into out/<variant>
@@ -70,7 +88,10 @@ def decide(state: dict) -> list[str]:
         if not b["name"].startswith("c_") or not b.get("metrics"):
             continue
         m = b["metrics"]
-        ok_run = m["games"] == 10
+        ok_run = m["games"] == 10 and m.get("decode_tok_s_ge8") is not None and m.get("harness_tokens", 0) > 0
+        if not ok_run:
+            msgs.append(f"{b['name']}: 実行不良（サーバ未起動・トークン 0 など）-> 不採用")
+            continue
         if b["metric"] == "decode":
             gain = m["decode_tok_s_ge8"] - dec_b
             ok = ok_run and gain > dec_thr and m["levels"] >= lv_min
@@ -141,6 +162,12 @@ def main() -> int:
         nxt = next((b for b in state["benches"] if b.get("status") == "pending"), None)
         if nxt is not None:
             out = push("bench10", nxt["opts"], nxt["slug"])
+            if out.startswith("GPU_QUOTA_HOLD"):
+                if not state.get("hold_notified"):
+                    msgs.append(f"GPU クォータ不足でベンチを保留: {out}")
+                    state["hold_notified"] = True
+                nxt = None
+        if nxt is not None:
             nxt["status"] = "running" if "successfully pushed" in out else "failed"
             msgs.append(f"ベンチ開始 {nxt['name']} ({nxt['slug']}, opts={nxt['opts']}): {out.strip()[:120]}")
 
@@ -178,6 +205,12 @@ def main() -> int:
                 msgs.append(f"昇格失敗 {p['slug']}: {detail} → 提出計画は元のまま")
         if p["status"] == "pending":
             out = push(p["variant"], state["adopted"], p["slug"])
+            if out.startswith("GPU_QUOTA_HOLD"):
+                if not state.get("hold_notified"):
+                    msgs.append(f"GPU クォータ不足で昇格の試走を保留（10/31 00:00 UTC にリセット）: {out}")
+                    state["hold_notified"] = True
+                break
+            state["hold_notified"] = False
             ver = None
             if "successfully pushed" in out:
                 try:
