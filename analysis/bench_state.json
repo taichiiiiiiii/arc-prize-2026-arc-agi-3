@@ -1,5 +1,5 @@
 {
- "comment": "Throughput loop (strategy.md 改善ループ). Rules fixed before results: decode gain > max(2*|base1-base2|, 4%) and levels >= min(base); ready shortening > max(2*|diff|, 120s).",
+ "comment": "Throughput loop (strategy.md 改善ループ). Rules fixed before results: decode gain > max(2*|base1-base2|, 4%) and levels >= min(base); ready shortening > max(2*|diff|, 120s). | 2026-10-28: re-opened for c_fp8ple; promotion waits for its decision.",
  "benches": [
   {
    "name": "base1",
@@ -87,30 +87,22 @@
     "actions": 19,
     "mean_score_public_subset": 0.0
    }
-  }
- ],
- "adopted": [
-  "precache8"
- ],
- "decided": true,
- "promote": [
-  {
-   "variant": "robust",
-   "slug": "arc3-m2-robust-opt",
-   "config": "A=",
-   "status": "pending",
-   "markers": []
   },
   {
-   "variant": "dprime",
-   "slug": "arc3-m2-robust-dprime-opt",
-   "config": "B=",
+   "name": "c_fp8ple",
+   "opts": [
+    "precache8",
+    "fp8ple"
+   ],
+   "slug": "arc3-m2-bench10-fp8",
    "status": "pending",
-   "markers": [
-    "PRIORITY_FORM installed: form=dprime"
-   ]
+   "metric": "decode_or_ready",
+   "note": "FP8 PLE mirror (dfranzen 10/12, 125GB vs 181GB). Lead: Franzen 27.9 -> 36.86 by 10/15 after releasing it (cause unknown).",
+   "ref": "c_precache8"
   }
  ],
- "hold_notified": true,
- "smoke_notified": true
+ "adopted": [],
+ "decided": false,
+ "hold_notified": false,
+ "smoke_notified": false
 }

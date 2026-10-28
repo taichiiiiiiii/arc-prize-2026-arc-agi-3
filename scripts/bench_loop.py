@@ -92,7 +92,15 @@ def decide(state: dict) -> list[str]:
         if not ok_run:
             msgs.append(f"{b['name']}: 実行不良（サーバ未起動・トークン 0 など）-> 不採用")
             continue
-        if b["metric"] == "decode":
+        if b["metric"] == "decode_or_ready":
+            ref = done[b["ref"]]["metrics"]
+            gain = m["decode_tok_s_ge8"] - dec_b
+            ready_gain = ref["ready_after_s"] - m["ready_after_s"]
+            ok = ok_run and m["levels"] >= lv_min and (gain > dec_thr or ready_gain > rdy_thr)
+            msgs.append(f"{b['name']}: decode {m['decode_tok_s_ge8']} vs base {dec_b:.1f} (gain {gain:+.1f}, need >{dec_thr:.1f}); "
+                        f"ready {m['ready_after_s']:.0f}s vs {b['ref']} {ref['ready_after_s']:.0f}s (短縮 {ready_gain:+.0f}s, need >{rdy_thr:.0f}s); "
+                        f"levels {m['levels']} (base min {lv_min}) -> " + ("採用" if ok else "不採用"))
+        elif b["metric"] == "decode":
             gain = m["decode_tok_s_ge8"] - dec_b
             ok = ok_run and gain > dec_thr and m["levels"] >= lv_min
             msgs.append(f"{b['name']}: decode {m['decode_tok_s_ge8']} vs base {dec_b:.1f} "
@@ -104,8 +112,8 @@ def decide(state: dict) -> list[str]:
             msgs.append(f"{b['name']}: ready {m['ready_after_s']:.0f}s vs base {rdy_b:.0f}s "
                         f"(短縮 {gain:+.0f}s, need >{rdy_thr:.0f}s) -> " + ("採用" if ok else "不採用"))
         if ok:
-            adopted += b["opts"]
-    state["adopted"] = adopted
+            adopted += [o for o in b["opts"] if o not in adopted]
+    state["adopted"] = sorted(adopted)
     state["decided"] = True
     return msgs
 

@@ -125,7 +125,13 @@ threading.Thread(target=_server_watchdog, daemon=True).start()
 OPTS = {
     "precache8": (6, "kwargs={'delay': 60, 'threads': 3})", "kwargs={'delay': 60, 'threads': 8})"),
     "spec4": (12, "    SPEC_STEPS=3,\n", "    SPEC_STEPS=4,\n"),
+    # same AutoRound target weights, PLE table in FP8 (125 GB instead of 181 GB; Franzen mirror 10/12).
+    # The M2 launcher supports it ("BF16 PLE or albucino FP8 PLE"); model source swapped in build().
+    "fp8ple": (4, "MODEL_DIR         = '/kaggle/input/models/dfranzen/intel-qwen3.8-flash-next-w4a16-autoround/transformers/default/1'",
+               "MODEL_DIR         = '/kaggle/input/models/dfranzen/albucino-qwen3.8-flash-next-w4a16-fp8ple/transformers/default/1'"),
 }
+MODEL_SWAP = {"fp8ple": ("dfranzen/intel-qwen3.8-flash-next-w4a16-autoround/Transformers/default/1",
+                         "dfranzen/albucino-qwen3.8-flash-next-w4a16-fp8ple/Transformers/default/1")}
 
 
 def replace_once(text: str, old: str, new: str, where: str) -> str:
@@ -221,6 +227,11 @@ if not TRUE_SUBMISSION:
     nb_name = f"{slug}.ipynb"
     (out / nb_name).write_text(json.dumps(nb, indent=1, ensure_ascii=False))
     meta = json.loads((SRC_DIR / "kernel-metadata.json").read_text())
+    for o in opts:
+        if o in MODEL_SWAP:
+            old, new = MODEL_SWAP[o]
+            assert old in meta["model_sources"], meta["model_sources"]
+            meta["model_sources"] = [new if m == old else m for m in meta["model_sources"]]
     for k in ("id_no",):
         meta.pop(k, None)
     meta.update({"id": kernel_id, "title": slug, "code_file": nb_name, "is_private": True,

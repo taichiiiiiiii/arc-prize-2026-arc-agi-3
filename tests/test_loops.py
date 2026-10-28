@@ -72,3 +72,25 @@ def test_watchdog_only_in_bench():
         nb = json.loads(build.build(v).read_text())
         has = any("[bench watchdog]" in "".join(c["source"]) for c in nb["cells"])
         assert has == want, v
+
+
+def test_bench_decide_fp8ple_ready_or_decode():
+    st = {"benches": [_bench("base1", 756.1, 975, 51), _bench("base2", 754.7, 825, 56),
+                      _bench("c_precache8", 755.1, 523, 53, "ready", ["precache8"]),
+                      dict(_bench("c_fp8ple", 756.0, 150, 54, "decode_or_ready", ["precache8", "fp8ple"]), ref="c_precache8")]}
+    bench_loop.decide(st)
+    assert st["adopted"] == ["fp8ple", "precache8"]
+    st["benches"][3]["metrics"]["ready_after_s"] = 500
+    bench_loop.decide(st)
+    assert st["adopted"] == ["precache8"]
+
+
+def test_build_fp8ple_swaps_model():
+    sys.path.insert(0, str(ROOT / "kernels" / "m2_robust"))
+    import json
+    import build
+    out = build.build("robust", ("precache8", "fp8ple"), "smoke-test-fp8")
+    meta = json.loads((out.parent / "kernel-metadata.json").read_text())
+    assert any("fp8ple" in m for m in meta["model_sources"]) and not any("autoround" in m for m in meta["model_sources"])
+    src = "".join("".join(c["source"]) for c in json.loads(out.read_text())["cells"])
+    assert "albucino-qwen3.8-flash-next-w4a16-fp8ple/transformers/default/1" in src and "'threads': 8}" in src
