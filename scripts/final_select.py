@@ -3,12 +3,13 @@
 Rules (fixed 2026-10-25, before results):
  1. Public only detects broken runs: drop 0.00 and runs >= 12 points below the mean of the other
     runs of the same configuration.
- 2. Never pick the max-Public run of a configuration; its representative is the newest healthy run.
- 3. Compare configurations by Public mean; a gap under 2 standard errors is "no difference".
- 5. Final 2 = representative of B (robust + D') and representative of A (default priority).
+ 2/5 (revised 2026-10-28, user-approved): final 2 = the two highest-Public healthy runs. Public and
+    Private come from the same run, so run-level luck is shared; E[Private | Public] is non-decreasing
+    in Public, so picking by Public is never worse in expectation than picking the newest runs.
+ 3. Compare configurations by Public mean; a gap under 2 standard errors is "no difference" (info only).
 
-Kaggle selects the 2 best-Public submissions automatically when none are chosen, which would break
-rule 2 - the two picks printed here must be selected by hand on the Submissions page.
+Select the two picks by hand on the Submissions page (Kaggle's automatic pick also uses Public, but
+it does not exclude broken runs, and pending runs at the deadline may be ignored).
 
 Usage: uv run python scripts/final_select.py            (reads `kaggle competitions submissions`)
        uv run python scripts/final_select.py --csv f.csv
@@ -78,7 +79,9 @@ def select(subs: list[Sub]) -> dict:
         gap = b["mean"] - a["mean"]
         out["compare"] = {"B_minus_A": round(gap, 2), "two_se": round(2 * se, 2),
                           "verdict": "差あり" if abs(gap) >= 2 * se else "差なし"}
-    out["picks"] = [x for x in (b["representative"], a["representative"]) if x]  # rule 5
+    excluded = {x.ref for x in out["excluded"]}
+    healthy_all = sorted((s for s in done if s.ref not in excluded), key=lambda s: -s.public)
+    out["picks"] = [s.ref for s in healthy_all[:2]]  # rules 2/5 (revised): top-2 Public among healthy runs
     return out
 
 

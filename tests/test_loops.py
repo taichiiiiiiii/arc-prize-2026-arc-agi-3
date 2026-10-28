@@ -17,13 +17,12 @@ def subs(rows):
     return fs.parse(HDR + "".join(f"{r},f,{d},{desc},SubmissionStatus.COMPLETE,{p},\n" for r, d, desc, p in rows))
 
 
-def test_final_select_newest_healthy_not_max():
+def test_final_select_top2_public_among_healthy():
     s = subs([("1", "2026-10-24", "E1 m2-robust v1", 25.67), ("2", "2026-10-25", "E2 m2-robust-dprime v1", 25.66),
               ("3", "2026-10-26", "E3 A=robust-v2", 27.31), ("4", "2026-10-27", "E4 B=robust-v2+D'", 28.96),
               ("5", "2026-10-28", "E5 A=robust-v2", 24.0)])
     r = fs.select(s)
-    assert r["configs"]["A"]["representative"] == "5"  # newest, although E3 has the higher Public
-    assert r["picks"] == ["4", "5"]  # B first, then A
+    assert r["picks"] == ["4", "3"]  # top-2 Public (rules 2/5 revised 2026-10-28)
     assert r["compare"]["verdict"] == "差なし"
 
 
@@ -33,7 +32,7 @@ def test_final_select_drops_broken_runs():
               ("5", "2026-10-27", "B=robust+D'", 26.0)])
     r = fs.select(s)
     assert {x.ref for x in r["excluded"]} == {"3", "4"}
-    assert r["configs"]["A"]["representative"] == "2"
+    assert r["picks"] == ["2", "1"] or r["picks"] == ["2", "5"]
 
 
 def _bench(name, dec, ready, levels, metric="base", opts=(), games=10, tokens=1):
