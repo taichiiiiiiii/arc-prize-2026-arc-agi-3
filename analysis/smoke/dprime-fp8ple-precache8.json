@@ -1,0 +1,22 @@
+{
+ "variant": "dprime",
+ "opts": [
+  "precache8",
+  "fp8ple"
+ ],
+ "ok": true,
+ "checks": {
+  "notebook ran without error": true,
+  "keepalive patch applied": true,
+  "TRUE_SUBMISSION=False": true,
+  "keepalive RESET while loading": true,
+  "mock got chat requests": true,
+  "mock replies had tool calls": true,
+  "game summaries for ['ls20']": true,
+  "actions > 0 in every game": true,
+  "D' installed": true
+ },
+ "requests": 149,
+ "actions": 337,
+ "at": "2026-10-28T22:08:26"
+}

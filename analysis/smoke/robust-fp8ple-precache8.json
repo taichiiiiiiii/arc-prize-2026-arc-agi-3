@@ -1,0 +1,21 @@
+{
+ "variant": "robust",
+ "opts": [
+  "precache8",
+  "fp8ple"
+ ],
+ "ok": true,
+ "checks": {
+  "notebook ran without error": true,
+  "keepalive patch applied": true,
+  "TRUE_SUBMISSION=False": true,
+  "keepalive RESET while loading": true,
+  "mock got chat requests": true,
+  "mock replies had tool calls": true,
+  "game summaries for ['ls20']": true,
+  "actions > 0 in every game": true
+ },
+ "requests": 146,
+ "actions": 329,
+ "at": "2026-10-28T21:57:52"
+}
