@@ -122,10 +122,19 @@ def swap_queue(config_prefix: str, slug: str, version: int, markers_extra: list[
     q = json.loads(QUEUE.read_text())
     n = 0
     for item in q["queue"]:
-        if item.get("state") in ("submitted", "failed") or not item["config"].startswith(config_prefix):
+        if item.get("state") in ("submitted", "failed"):
+            continue
+        if config_prefix.startswith("E") and "=" not in config_prefix:
+            if item["tag"] != config_prefix:
+                continue
+        elif not item["config"].startswith(config_prefix):
             continue
         item["kernel"], item["version"] = f"taichiiiii/{slug}", version
-        item["config"] += " +opt"
+        if config_prefix.startswith("E") and "=" not in config_prefix:
+            item["config"] = "A=robust-v2+opt+persistvars"
+            item["markers"] = ["m2-robust: keepalive patch applied", "taaf.kaggle: TRUE_SUBMISSION=False"] + list(markers_extra)
+        else:
+            item["config"] += " +opt"
         item.pop("verify", None)
         item.pop("verify_detail", None)
         n += 1
@@ -185,12 +194,12 @@ def main() -> int:
             and names["base1"].get("metrics") and names["base2"].get("metrics")):
         msgs += ["判定（事前登録の規則）:"] + decide(state)
         if state["adopted"]:
+            # After 10/31 the only unsubmitted slots are E9 (A) and E10 (B); E10 is given to the
+            # persistvars bet (extra_promotions, user-approved 2026-10-28), so no B-opt rehearsal.
             state["promote"] = [
                 {"variant": "robust", "slug": "arc3-m2-robust-opt", "config": "A=", "status": "pending",
                  "markers": []},
-                {"variant": "dprime", "slug": "arc3-m2-robust-dprime-opt", "config": "B=", "status": "pending",
-                 "markers": ["PRIORITY_FORM installed: form=dprime"]},
-            ]
+            ] + [dict(x) for x in state.get("extra_promotions", [])]
         else:
             msgs.append("採用なし: 提出計画は変更しない")
 
@@ -212,15 +221,16 @@ def main() -> int:
                 p["status"] = "failed"
                 msgs.append(f"昇格失敗 {p['slug']}: {detail} → 提出計画は元のまま")
         if p["status"] == "pending":
-            smoke = ROOT / "analysis" / "smoke" / f"{p['variant']}-{'-'.join(sorted(state['adopted']))}.json"
+            popts = sorted(set(state["adopted"]) | set(p.get("extra_opts", [])))
+            smoke = ROOT / "analysis" / "smoke" / f"{p['variant']}-{'-'.join(popts)}.json"
             res = json.loads(smoke.read_text()) if smoke.exists() else {}
-            if not (res.get("ok") and sorted(res.get("opts", [])) == sorted(state["adopted"])):
+            if not (res.get("ok") and sorted(res.get("opts", [])) == popts):
                 if not state.get("smoke_notified"):
                     msgs.append(f"昇格保留: 手元の通しテスト未合格 ({smoke.name})。"
-                                f"`scripts/local_smoke.py {p['variant']} --opts {','.join(state['adopted'])} --result {smoke}`")
+                                f"`scripts/local_smoke.py {p['variant']} --opts {','.join(popts)} --result {smoke}`")
                     state["smoke_notified"] = True
                 break
-            out = push(p["variant"], state["adopted"], p["slug"])
+            out = push(p["variant"], popts, p["slug"])
             if out.startswith("GPU_QUOTA_HOLD"):
                 if not state.get("hold_notified"):
                     msgs.append(f"GPU クォータ不足で昇格の試走を保留（10/31 00:00 UTC にリセット）: {out}")
@@ -234,7 +244,7 @@ def main() -> int:
                 except Exception:  # noqa: BLE001
                     ver = None
             p["status"], p["version"] = ("running", ver) if ver else ("failed", None)
-            msgs.append(f"昇格の試走開始 {p['slug']} opts={state['adopted']}: {out.strip()[:100]}")
+            msgs.append(f"昇格の試走開始 {p['slug']} opts={popts}: {out.strip()[:100]}")
             break
         if p["status"] == "running":
             break

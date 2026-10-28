@@ -94,3 +94,22 @@ def test_build_fp8ple_swaps_model():
     assert any("fp8ple" in m for m in meta["model_sources"]) and not any("autoround" in m for m in meta["model_sources"])
     src = "".join("".join(c["source"]) for c in json.loads(out.read_text())["cells"])
     assert "albucino-qwen3.8-flash-next-w4a16-fp8ple/transformers/default/1" in src and "'threads': 8}" in src
+
+
+def test_swap_queue_by_tag(tmp_path):
+    import json
+    q = {"queue": [{"tag": "E9", "config": "A=robust-v2", "kernel": "k/a", "version": 2, "markers": ["m"]},
+                   {"tag": "E10", "config": "B=robust-v2+D'", "kernel": "k/b", "version": 1, "markers": ["m", "d"], "verify": "ok"}]}
+    f = tmp_path / "q.json"
+    f.write_text(json.dumps(q))
+    old = bench_loop.QUEUE
+    bench_loop.QUEUE = f
+    try:
+        assert bench_loop.swap_queue("A=", "arc3-m2-robust-opt", 1, []) == 1  # promotion order: A-opt first
+        assert bench_loop.swap_queue("E10", "arc3-m2-robust-pv", 3, ["persistvars patch applied"]) == 1
+    finally:
+        bench_loop.QUEUE = old
+    r = json.loads(f.read_text())["queue"]
+    assert r[0]["kernel"] == "taichiiiii/arc3-m2-robust-opt"
+    assert r[1]["kernel"] == "taichiiiii/arc3-m2-robust-pv" and r[1]["config"].startswith("A=") and "verify" not in r[1]
+    assert "persistvars patch applied" in r[1]["markers"] and "PRIORITY_FORM installed: form=dprime" not in r[1]["markers"]

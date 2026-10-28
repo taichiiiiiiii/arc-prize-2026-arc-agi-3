@@ -103,6 +103,20 @@
  ],
  "adopted": [],
  "decided": false,
- "hold_notified": false,
- "smoke_notified": false
+ "hold_notified": true,
+ "smoke_notified": false,
+ "extra_promotions": [
+  {
+   "variant": "robust",
+   "slug": "arc3-m2-robust-pv",
+   "config": "E10",
+   "extra_opts": [
+    "persistvars"
+   ],
+   "status": "pending",
+   "markers": [
+    "persistvars patch applied"
+   ]
+  }
+ ]
 }
