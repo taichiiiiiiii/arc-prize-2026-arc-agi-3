@@ -97,7 +97,7 @@ def main() -> None:
         text = "\n".join(l for l in text.splitlines() if not l.startswith("Warning"))
     r = select(parse(text))
     for cfg, c in r["configs"].items():
-        print(f"{cfg}: n={c['n']} mean={c['mean']} runs={c['runs']} representative={c['representative']}")
+        print(f"{cfg}: n={c['n']} mean={c['mean']} runs={c['runs']}")
     for s in r["excluded"]:
         print(f"excluded (rule 1): {s.ref} {s.public} {s.desc[:60]}")
     if "compare" in r:
