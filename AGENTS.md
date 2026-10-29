@@ -30,6 +30,7 @@
 3. **コミット**: 1 論理単位ごと、`feat(...)` / `fix(...)` / `chore(...)` の形、本文に `Refs #番号`。
 4. **PR**: ブランチを push して `gh pr create --base develop`。本文に変更内容・数値・`Fixes #番号`。
 5. **CI**: GitHub Actions の `tests` が通るまでマージしない。
+   - 暫定（2026-10-29 オーナー承認、締切まで）: GitHub Actions が課金エラーで開始されないため、PR の head で手元の `env -u PYTHONPATH uv run pytest -q tests/` を実行し、結果（passed/skipped 数と head のコミット）を PR にコメントしたものを CI 通過とみなす。public 化後は Actions に戻す。
 6. **マージ**: 受け入れ条件を満たしたら `gh pr merge --merge --delete-branch`（マージコミットを残す）。
 7. **確認と記録**: マージ後の `develop` で測り直し、結果を Issue にコメントし、#1 のチェックを更新する。
 
