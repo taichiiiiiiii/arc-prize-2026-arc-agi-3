@@ -18,6 +18,12 @@
 - `data/`・`work/`・重みはコミットしない。
 - 判定規則は結果が出る前に `analysis/experiment_ledger.md` に書く。
 
+## 公開を前提に書く（2026-10-29〜、締切後に public 化予定: Issue #4）
+- 認証情報・トークン・個人の絶対パス（`/Users/...`）・メールアドレスをコミットしない。パスはリポジトリからの相対で書く。
+- コンペデータ、公開ゲームの盤面・手順、要求ログの本文は `data/` か `work/`（git 外）に置く。`analysis/` には集計値だけを置く。
+- 第三者のコードは `third_party/` に無改変で置き、出典とライセンスを `NOTICE.md` に書く。
+- 期間中は private のまま（規約: 私的共有の禁止）。public 化は締切後。
+
 ## 環境
 - Python 3.12（Kaggle の wheel が cp312）。`arc-agi==0.9.8` / `arcengine==0.9.3` は Kaggle 同梱版に固定。
 - Hermes のシェルでは `env -u PYTHONPATH uv run ...`（別 Python の site-packages が混入するため）。
