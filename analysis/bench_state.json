@@ -95,15 +95,17 @@
     "fp8ple"
    ],
    "slug": "arc3-m2-bench10-fp8",
-   "status": "pending",
+   "status": "failed",
    "metric": "decode_or_ready",
    "note": "FP8 PLE mirror (dfranzen 10/12, 125GB vs 181GB). Lead: Franzen 27.9 -> 36.86 by 10/15 after releasing it (cause unknown).",
    "ref": "c_precache8"
   }
  ],
- "adopted": [],
- "decided": false,
- "hold_notified": true,
+ "adopted": [
+  "precache8"
+ ],
+ "decided": true,
+ "hold_notified": false,
  "smoke_notified": false,
  "extra_promotions": [
   {
@@ -117,6 +119,29 @@
    "markers": [
     "persistvars patch applied"
    ]
+  }
+ ],
+ "promote": [
+  {
+   "variant": "robust",
+   "slug": "arc3-m2-robust-opt",
+   "config": "A=",
+   "status": "failed",
+   "markers": [],
+   "version": null
+  },
+  {
+   "variant": "robust",
+   "slug": "arc3-m2-robust-pv",
+   "config": "E10",
+   "extra_opts": [
+    "persistvars"
+   ],
+   "status": "failed",
+   "markers": [
+    "persistvars patch applied"
+   ],
+   "version": null
   }
  ]
 }
