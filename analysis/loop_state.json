@@ -8,7 +8,8 @@
   "57716602",
   "57752167",
   "57785900",
-  "57821060"
+  "57821060",
+  "57854236"
  ],
  "queue": [
   {
@@ -114,7 +115,9 @@
     "taaf.kaggle: TRUE_SUBMISSION=False"
    ],
    "verify": "ok",
-   "verify_detail": "ft09 4/6 lv tok=449150, ls20 4/7 lv tok=339785"
+   "verify_detail": "ft09 4/6 lv tok=449150, ls20 4/7 lv tok=339785",
+   "state": "submitted",
+   "submitted_at": "2026-11-01T00:03:55.320785+00:00"
   },
   {
    "tag": "E10",
@@ -126,7 +129,9 @@
     "m2-robust: keepalive patch applied",
     "taaf.kaggle: TRUE_SUBMISSION=False",
     "PRIORITY_FORM installed: form=dprime"
-   ]
+   ],
+   "verify": "ok",
+   "verify_detail": "ft09 6/6 lv tok=72139, ls20 4/7 lv tok=237785"
   }
  ]
 }
