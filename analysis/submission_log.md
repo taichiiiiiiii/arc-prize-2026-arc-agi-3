@@ -7,3 +7,5 @@
 | 57682179 | 2026-10-27 00:03 | E4 B=robust-v2+D': arc3-m2-robust-dprime v1 | COMPLETE | 28.96 |
 | 57716602 | 2026-10-28 00:03 | E5 A=robust-v2(default priority): arc3-m2-robust v2 | COMPLETE | 21.32 |
 | 57752167 | 2026-10-29 00:03 | E6 B=robust-v2+D': arc3-m2-robust-dprime v1 | COMPLETE | 29.88 |
+| 57785900 | 2026-10-30 00:03 | E7 A=robust-v2(default priority): arc3-m2-robust v2 | COMPLETE | 32.26 |
+| 57821060 | 2026-10-31 00:19 | E8 B=robust-v2+D': arc3-m2-robust-dprime v1 | COMPLETE | 26.53 |
