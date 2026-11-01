@@ -79,7 +79,7 @@ def status(slug: str) -> str:
 def transient(out: str) -> bool:
     """Kaggle auth expires for 30-45 min about every 12 h; such failures must not become 'failed'."""
     return any(x in out for x in ("Authentication", "401", "403", "429", "Unauthorized", "timed out", "Timeout",
-                                  "Connection", "500", "502", "503"))
+                                  "Connection", "500", "502", "503", "Maximum batch GPU session count"))
 
 
 def decide(state: dict) -> list[str]:
