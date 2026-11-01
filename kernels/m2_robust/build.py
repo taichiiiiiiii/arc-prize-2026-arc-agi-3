@@ -129,7 +129,7 @@ OPTS = {
     "spec4": (12, "    SPEC_STEPS=3,\n", "    SPEC_STEPS=4,\n"),
     # same AutoRound target weights, PLE table in FP8 (125 GB instead of 181 GB; Franzen mirror 10/12).
     # The M2 launcher supports it ("BF16 PLE or albucino FP8 PLE"); model source swapped in build().
-    "inputfix": (4, "SERVED_MODEL_NAME = 'flashnext'\n", 'SERVED_MODEL_NAME = \'flashnext\'\n\n# [inputfix] Kaggle sometimes mounts inputs under a different layout (11/01: the bundle dataset was\n# missing at /kaggle/input/datasets/...). Resolve each input by its marker file anywhere under /kaggle/input.\ndef _resolve_input(path, marker):\n    import glob as _g\n    if os.path.exists(os.path.join(path, marker)):\n        return path\n    hits = sorted({os.path.dirname(h) for h in _g.glob(f"/kaggle/input/**/{marker}", recursive=True)})\n    name = os.path.basename(path.rstrip("/"))\n    best = [h for h in hits if name in h] or hits\n    print(f"[inputfix] {path} missing; candidates for {marker}: {hits[:6]}", flush=True)\n    if not best:\n        print("[inputfix] /kaggle/input listing:", sorted(_g.glob("/kaggle/input/*/*"))[:40], flush=True)\n        return path\n    return best[0]\nORIG_BUNDLE_DIR = _resolve_input(ORIG_BUNDLE_DIR, "deploy_target.pkl")\nMODEL_DIR = _resolve_input(MODEL_DIR, "config.json")\nprint(f"[inputfix] bundle={ORIG_BUNDLE_DIR} model={MODEL_DIR}", flush=True)\n\n'),
+    "inputfix": (4, "SERVED_MODEL_NAME = 'flashnext'\n", 'SERVED_MODEL_NAME = \'flashnext\'\n\n# [inputfix] New kernels (11/01) get the flat input layout /kaggle/input/<slug> instead of\n# /kaggle/input/datasets/<owner>/<slug> and /kaggle/input/competitions/<slug>. Resolve every input.\ndef _kin(path, marker=None):\n    import glob as _g\n    ok = (lambda p: os.path.exists(os.path.join(p, marker))) if marker else os.path.isdir\n    if ok(path):\n        return path\n    flat = "/kaggle/input/" + os.path.basename(path.rstrip("/"))\n    if ok(flat):\n        print(f"[inputfix] {path} -> {flat}", flush=True)\n        return flat\n    if marker:\n        hits = sorted({os.path.dirname(h) for h in _g.glob(f"/kaggle/input/**/{marker}", recursive=True)})\n        name = os.path.basename(path.rstrip("/"))\n        best = [h for h in hits if name in h] or hits\n        if best:\n            print(f"[inputfix] {path} -> {best[0]} (by {marker})", flush=True)\n            return best[0]\n    print(f"[inputfix] {path} NOT FOUND; /kaggle/input:", sorted(_g.glob("/kaggle/input/*")), flush=True)\n    return path\nWHEELHOUSE_DIR = _kin(WHEELHOUSE_DIR)\nORIG_BUNDLE_DIR = _kin(ORIG_BUNDLE_DIR, "deploy_target.pkl")\nMODEL_DIR = _kin(MODEL_DIR, "config.json")\nDRAFT_MODEL_DIR = _kin(DRAFT_MODEL_DIR)\nCOMP_DIR = _kin("/kaggle/input/competitions/arc-prize-2026-arc-agi-3", "arc_agi_3_wheels")\nprint(f"[inputfix] bundle={ORIG_BUNDLE_DIR} wheels={WHEELHOUSE_DIR} comp={COMP_DIR}", flush=True)\n\n'),
     "fp8ple": (4, "MODEL_DIR         = '/kaggle/input/models/dfranzen/intel-qwen3.8-flash-next-w4a16-autoround/transformers/default/1'",
                "MODEL_DIR         = '/kaggle/input/models/dfranzen/albucino-qwen3.8-flash-next-w4a16-fp8ple/transformers/default/1'"),
 }
@@ -207,6 +207,9 @@ if not TRUE_SUBMISSION:
 
     if "persistvars" in opts:  # behaviour-CHANGING bet (not a throughput option): appended to cell 4
         put(4, src(4) + PERSISTVARS)
+    if "inputfix" in opts:  # competition paths in the wheel-install and benchmark cells
+        for ci in (8, 20):
+            put(ci, replace_once(src(ci), '"/kaggle/input/competitions/arc-prize-2026-arc-agi-3/', 'COMP_DIR + "/', f"inputfix cell {ci}"))
     if cfg.get("watchdog"):
         assert "proc = subprocess.Popen(args" in src(12), "launcher cell moved"
         put(12, src(12) + WATCHDOG)
