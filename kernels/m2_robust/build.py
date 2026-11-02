@@ -22,8 +22,11 @@ Variant "dprime" additionally inserts tantan0327's D' slot-priority cell (third_
 from __future__ import annotations
 
 import json
+import os
 import shutil
 from pathlib import Path
+
+OWNER = os.environ.get("KAGGLE_USERNAME", "taichiiiii")  # Kaggle account that owns the kernels
 
 ROOT = Path(__file__).resolve().parents[2]
 SRC_DIR = ROOT / "third_party" / "dfranzen_m2"
@@ -146,7 +149,7 @@ def replace_once(text: str, old: str, new: str, where: str) -> str:
 def build(variant: str = "robust", opts: tuple[str, ...] = (), slug: str | None = None) -> Path:
     cfg = VARIANTS[variant]
     slug, extra_cell, rgames, rmin = slug or cfg["slug"], cfg["extra"], cfg["games"], cfg["minutes"]
-    kernel_id = f"taichiiiii/{slug}"
+    kernel_id = f"{OWNER}/{slug}"
     nb = json.loads(SRC_NB.read_text())
     cells = nb["cells"]
     src = lambda i: "".join(cells[i]["source"])  # noqa: E731

@@ -16,4 +16,7 @@ Not included in this repository (downloaded at run time or attached as Kaggle in
   SGLang wheelhouse (`dfranzen/pennyroyal-v253`).
 - Competition data and game environments (`data/`, Kaggle competition terms).
 
+The Apache License 2.0 text is in `third_party/LICENSE-APACHE-2.0.txt`; the files under
+`third_party/` remain under their original license and copyright.
+
 Everything else in this repository is under the MIT License (`LICENSE`).
