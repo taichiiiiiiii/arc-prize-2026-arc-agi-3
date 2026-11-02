@@ -9,7 +9,8 @@
   "57752167",
   "57785900",
   "57821060",
-  "57854236"
+  "57854236",
+  "57887794"
  ],
  "queue": [
   {
@@ -122,16 +123,18 @@
   {
    "tag": "E10",
    "planned_utc_day": "11-02",
-   "config": "B=robust-v2+D'",
-   "kernel": "taichiiiii/arc3-m2-robust-dprime",
-   "version": 1,
+   "config": "A=robust-v2+opt+persistvars",
+   "kernel": "taichiiiii/arc3-m2-robust-pv",
+   "version": 4,
    "markers": [
     "m2-robust: keepalive patch applied",
     "taaf.kaggle: TRUE_SUBMISSION=False",
-    "PRIORITY_FORM installed: form=dprime"
+    "persistvars patch applied"
    ],
    "verify": "ok",
-   "verify_detail": "ft09 6/6 lv tok=72139, ls20 4/7 lv tok=237785"
+   "verify_detail": "ft09 6/6 lv tok=61769, ls20 5/7 lv tok=421835",
+   "state": "submitted",
+   "submitted_at": "2026-11-02T00:03:50.314729+00:00"
   }
  ]
 }
