@@ -1,13 +1,13 @@
 # Third-party code and attributions
 
 This repository builds on public work from the ARC Prize 2026 — ARC-AGI-3 community. The code
-under `third_party/` is kept unchanged so that every change made here is visible as a diff in
-`kernels/m2_robust/build.py`.
+under `third_party/` is kept unchanged. Modifications are not made to these files; they are
+applied at build time as patches by `kernels/m2_robust/build.py`, so every change is visible there.
 
 | Path | Origin | License |
 |---|---|---|
 | `third_party/dfranzen_m2/` | Daniel Franzen, "ARC-AGI-3 Milestone 2 Solution" (Kaggle notebook `dfranzen/arc-agi-3-milestone-2-solution`, pulled 2026-10-24). It builds on Tufa Labs' Duck harness / TAAF. | Apache 2.0 (as released on Kaggle) |
-| `third_party/dprime_tantan0327/priority_form_cell.py` | Cell 17 of `tantan0327/arc3-franzen-dprime` (pulled 2026-10-25). The D' slot-priority formula is from shiiin9's public notebook. | Apache 2.0 (Kaggle); the cell header states CC0 / MIT-0 |
+| `third_party/dprime_tantan0327/priority_form_cell.py` | Cell 17 of `tantan0327/arc3-franzen-dprime` (pulled 2026-10-25). The D' slot-priority formula is from shiiin9's public notebook. | Released on Kaggle under Apache 2.0; the cell header additionally dedicates it as CC0 / MIT-0. Treated here as Apache 2.0. |
 
 Not included in this repository (downloaded at run time or attached as Kaggle inputs):
 - Model weights: Qwen3.8-Flash-Next (Qwen Community License 1.0), Intel AutoRound W4A16

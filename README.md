@@ -74,8 +74,18 @@ uv run python scripts/local_eval.py --agent random --max-actions 300
 # build a kernel variant (pushing needs your own Kaggle account)
 export KAGGLE_USERNAME=<your-kaggle-name>
 uv run python kernels/m2_robust/build.py robust --opts precache8,inputfix --slug arc3-m2-robust-x
-uv run python scripts/local_smoke.py robust --opts precache8,inputfix   # needs data/bundle, see the script
+
+# local end-to-end smoke test: needs the TAAF source bundle (Kaggle dataset) in data/bundle
+kaggle datasets download dfranzen/taaf-kaggle-source-bundle-copy -p data/bundle --unzip
+uv run python scripts/local_smoke.py robust --opts precache8,inputfix
 ```
+
+Four tests skip without `data/bundle` (they apply the patches to the real harness).
+
+`scripts/loop_tick.py` (submits) and `scripts/bench_loop.py` (pushes kernels, starts GPU runs) are
+the author's scheduled automation. They read the author's queue in `analysis/*.json` and have side
+effects on your Kaggle account; read them before running, and set `KAGGLE_USERNAME` (and
+`KAGGLE_CLI` if `kaggle` is not on `PATH`).
 
 Model weights, the TAAF source bundle and the SGLang wheelhouse are Kaggle inputs and are not in
 this repository. When run from another tool's shell, `env -u PYTHONPATH uv run ...` avoids a stray

@@ -20,7 +20,9 @@ import argparse
 import csv
 import io
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
 from datetime import datetime, UTC
@@ -30,7 +32,7 @@ ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "analysis" / "loop_state.json"
 LOG_MD = ROOT / "analysis" / "submission_log.md"
 COMP = "arc-prize-2026-arc-agi-3"
-KAGGLE = "/Library/Frameworks/Python.framework/Versions/3.14/bin/kaggle"
+KAGGLE = os.environ.get("KAGGLE_CLI") or shutil.which("kaggle") or "kaggle"  # override with KAGGLE_CLI
 WORK = ROOT / "work" / "loop"
 SUMMARY_RE = re.compile(r"^\s+([a-z0-9]{4}-[0-9a-f]+): score=([\d.]+), levels=([\d.]+)/(\d+), "
                         r"actions=(\d+), tokens=(\d+)\s*$", re.M)

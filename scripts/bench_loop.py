@@ -277,5 +277,8 @@ def main() -> int:
 
 
 if __name__ == "__main__":
+    import argparse
+    argparse.ArgumentParser(description=__doc__.split("\n")[0] + " Side effects: pushes Kaggle kernels, starts GPU runs, "
+                            "edits analysis/*.json. Author's automation; set KAGGLE_USERNAME before use.").parse_args()
     _lk = _lock()
     sys.exit(main())
