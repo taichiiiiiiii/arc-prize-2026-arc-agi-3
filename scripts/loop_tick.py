@@ -23,7 +23,7 @@ import json
 import re
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -124,7 +124,7 @@ def main() -> int:
     state["reported"] = sorted(seen)
 
     # 3. submit the next item
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today = datetime.now(UTC).strftime("%Y-%m-%d")
     pending = [s for s in subs if "PENDING" in s["status"]]
     today_n = sum(1 for s in subs if s["date"].startswith(today))
     queue = state["queue"]
@@ -147,7 +147,7 @@ def main() -> int:
                          "-f", "submission.parquet", "-m", msg)
             ok = any(s2["description"] == msg for s2 in submissions())  # confirm by reading back
             if ok:
-                nxt["state"], nxt["submitted_at"] = "submitted", datetime.now(timezone.utc).isoformat()
+                nxt["state"], nxt["submitted_at"] = "submitted", datetime.now(UTC).isoformat()
                 msgs.append(f"提出しました: {msg}")
             else:
                 msgs.append(f"提出失敗: {msg}: {out.strip()[:300]}")

@@ -18,7 +18,8 @@ import logging
 import random
 import time
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
+from collections.abc import Callable
 
 import arc_agi
 from arcengine import GameAction, GameState

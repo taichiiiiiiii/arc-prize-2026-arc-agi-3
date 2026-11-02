@@ -94,7 +94,7 @@ def main() -> None:
     else:
         text = subprocess.run(["kaggle", "competitions", "submissions", COMP, "--page-size", "100", "--csv"],
                               capture_output=True, text=True, timeout=300).stdout
-        text = "\n".join(l for l in text.splitlines() if not l.startswith("Warning"))
+        text = "\n".join(line for line in text.splitlines() if not line.startswith("Warning"))
     r = select(parse(text))
     for cfg, c in r["configs"].items():
         print(f"{cfg}: n={c['n']} mean={c['mean']} runs={c['runs']}")
