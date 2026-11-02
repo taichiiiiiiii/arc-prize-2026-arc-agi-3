@@ -11,6 +11,7 @@ State: analysis/bench_state.json. Usage: env -u PYTHONPATH uv run python scripts
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import statistics as st
 import subprocess
@@ -21,6 +22,8 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
 import bench_report  # noqa: E402
 import loop_tick  # noqa: E402
+
+OWNER = os.environ.get("KAGGLE_USERNAME", "taichiiiii")  # Kaggle account that owns the kernels
 
 STATE = ROOT / "analysis" / "bench_state.json"
 QUEUE = ROOT / "analysis" / "loop_state.json"
@@ -69,7 +72,7 @@ def push(variant: str, opts: list[str], slug: str) -> str:
 
 def status(slug: str) -> str:
     """RUNNING / QUEUED / COMPLETE / ERROR / CANCEL, or UNKNOWN (auth blip, network) -> retry later."""
-    s = loop_tick.kaggle("kernels", "status", f"taichiiiii/{slug}")
+    s = loop_tick.kaggle("kernels", "status", f"{OWNER}/{slug}")
     for k in ("RUNNING", "QUEUED", "COMPLETE", "ERROR", "CANCEL"):
         if k in s:
             return k
@@ -136,7 +139,7 @@ def swap_queue(config_prefix: str, slug: str, version: int, markers_extra: list[
                 continue
         elif not item["config"].startswith(config_prefix):
             continue
-        item["kernel"], item["version"] = f"taichiiiii/{slug}", version
+        item["kernel"], item["version"] = f"{OWNER}/{slug}", version
         if config_prefix.startswith("E") and "=" not in config_prefix:
             item["config"] = "A=robust-v2+opt+persistvars"
             item["markers"] = ["m2-robust: keepalive patch applied", "taaf.kaggle: TRUE_SUBMISSION=False"] + list(markers_extra)
@@ -171,7 +174,7 @@ def main() -> int:
             continue
         d = OUT_DIR / b["name"]
         d.mkdir(parents=True, exist_ok=True)
-        loop_tick.kaggle("kernels", "output", f"taichiiiii/{b['slug']}", "-p", str(d), "--file-pattern",
+        loop_tick.kaggle("kernels", "output", f"{OWNER}/{b['slug']}", "-p", str(d), "--file-pattern",
                          rf"({b['slug']}\.log|serve\.log)$", timeout=900)
         try:
             b["metrics"] = bench_report.report(d)
@@ -221,7 +224,7 @@ def main() -> int:
             s = status(p["slug"])
             if s in ("RUNNING", "QUEUED", "UNKNOWN"):
                 break
-            item = {"kernel": f"taichiiiii/{p['slug']}", "version": p["version"],
+            item = {"kernel": f"{OWNER}/{p['slug']}", "version": p["version"],
                     "markers": ["m2-robust: keepalive patch applied", "taaf.kaggle: TRUE_SUBMISSION=False"]
                     + p["markers"]}
             v, detail = loop_tick.verify_kernel(item)
