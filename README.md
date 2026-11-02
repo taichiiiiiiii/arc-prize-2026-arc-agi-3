@@ -2,6 +2,16 @@
 
 https://www.kaggle.com/competitions/arc-prize-2026-arc-agi-3
 
+**English summary.** A robustness-first fork of Daniel Franzen's public Milestone-2 solution
+(Qwen3.8-Flash-Next W4A16 served by SGLang on one RTX PRO 6000, Duck/TAAF harness), run as an
+automated "loop": a cron submission loop that rehearses each kernel and submits one per day, a
+throughput-improvement loop that only adopts behaviour-neutral changes measured on a 10-game
+bench with pre-registered rules, a local end-to-end smoke test with a mock LLM server, and a
+daily review. Notes, decisions and every experiment are in `analysis/` (Japanese).
+See `NOTICE.md` for third-party code and licenses.
+
+---
+
 対話型ゲーム環境で、未見のゲームを探索して攻略するエージェントを作るコード・コンペ。
 提出はノートブック（インターネット無効・9 時間以内）、採点は Kaggle 側のゲートウェイ上の
 非公開 110 ゲーム（Public 55 / Private 55）で行われる。内容のまとめは `docs/competition.md`。

@@ -6,3 +6,8 @@
 | 57646304 | 2026-10-26 00:04 | E3 A=robust-v2(default priority): arc3-m2-robust v2 | COMPLETE | 27.31 |
 | 57682179 | 2026-10-27 00:03 | E4 B=robust-v2+D': arc3-m2-robust-dprime v1 | COMPLETE | 28.96 |
 | 57716602 | 2026-10-28 00:03 | E5 A=robust-v2(default priority): arc3-m2-robust v2 | COMPLETE | 21.32 |
+| 57752167 | 2026-10-29 00:03 | E6 B=robust-v2+D': arc3-m2-robust-dprime v1 | COMPLETE | 29.88 |
+| 57785900 | 2026-10-30 00:03 | E7 A=robust-v2(default priority): arc3-m2-robust v2 | COMPLETE | 32.26 |
+| 57821060 | 2026-10-31 00:19 | E8 B=robust-v2+D': arc3-m2-robust-dprime v1 | COMPLETE | 26.53 |
+| 57854236 | 2026-11-01 00:03 | E9 A=robust-v2(default priority): arc3-m2-robust v2 | COMPLETE | 26.79 |
+| 57887794 | 2026-11-02 00:03 | E10 A=robust-v2+opt+persistvars: arc3-m2-robust-pv v4 | COMPLETE | 26.99 |

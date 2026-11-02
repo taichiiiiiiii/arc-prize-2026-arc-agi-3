@@ -68,11 +68,18 @@ def push(variant: str, opts: list[str], slug: str) -> str:
 
 
 def status(slug: str) -> str:
+    """RUNNING / QUEUED / COMPLETE / ERROR / CANCEL, or UNKNOWN (auth blip, network) -> retry later."""
     s = loop_tick.kaggle("kernels", "status", f"taichiiiii/{slug}")
     for k in ("RUNNING", "QUEUED", "COMPLETE", "ERROR", "CANCEL"):
         if k in s:
             return k
-    return s.strip()[:80]
+    return "UNKNOWN"
+
+
+def transient(out: str) -> bool:
+    """Kaggle auth expires for 30-45 min about every 12 h; such failures must not become 'failed'."""
+    return any(x in out for x in ("Authentication", "401", "403", "429", "Unauthorized", "timed out", "Timeout",
+                                  "Connection", "500", "502", "503", "Maximum batch GPU session count"))
 
 
 def decide(state: dict) -> list[str]:
@@ -160,7 +167,7 @@ def main() -> int:
     running = [b for b in state["benches"] if b.get("status") == "running"]
     for b in running:
         s = status(b["slug"])
-        if s in ("RUNNING", "QUEUED"):
+        if s in ("RUNNING", "QUEUED", "UNKNOWN"):
             continue
         d = OUT_DIR / b["name"]
         d.mkdir(parents=True, exist_ok=True)
@@ -173,8 +180,11 @@ def main() -> int:
                 {k: b["metrics"].get(k) for k in ("ready_after_s", "decode_tok_s_ge8", "accept_len",
                                                   "prefix_cached_share", "levels", "games")}, ensure_ascii=False))
         except Exception as e:  # noqa: BLE001
+            b["fetch_tries"] = b.get("fetch_tries", 0) + 1
+            if s == "COMPLETE" and b["fetch_tries"] < 3:
+                continue  # output download / parse can fail transiently; retry next tick
             b["status"] = "failed"
-            msgs.append(f"ベンチ失敗 {b['name']} ({s}): {e}")
+            msgs.append(f"ベンチ失敗 {b['name']} ({s}, {b['fetch_tries']} 回): {e}")
     if not any(b.get("status") == "running" for b in state["benches"]):
         nxt = next((b for b in state["benches"] if b.get("status") == "pending"), None)
         if nxt is not None:
@@ -184,6 +194,8 @@ def main() -> int:
                     msgs.append(f"GPU クォータ不足でベンチを保留: {out}")
                     state["hold_notified"] = True
                 nxt = None
+        if nxt is not None and "successfully pushed" not in out and transient(out):
+            nxt = None  # stay pending; retry next tick
         if nxt is not None:
             nxt["status"] = "running" if "successfully pushed" in out else "failed"
             msgs.append(f"ベンチ開始 {nxt['name']} ({nxt['slug']}, opts={nxt['opts']}): {out.strip()[:120]}")
@@ -207,7 +219,7 @@ def main() -> int:
     for p in state.get("promote", []):
         if p["status"] == "running":
             s = status(p["slug"])
-            if s in ("RUNNING", "QUEUED"):
+            if s in ("RUNNING", "QUEUED", "UNKNOWN"):
                 break
             item = {"kernel": f"taichiiiii/{p['slug']}", "version": p["version"],
                     "markers": ["m2-robust: keepalive patch applied", "taaf.kaggle: TRUE_SUBMISSION=False"]
@@ -243,6 +255,12 @@ def main() -> int:
                     ver = int(out.split("Kernel version ")[1].split()[0])
                 except Exception:  # noqa: BLE001
                     ver = None
+            if not ver:
+                if not transient(out):
+                    p["push_tries"] = p.get("push_tries", 0) + 1
+                if p.get("push_tries", 0) < 5:
+                    msgs.append(f"昇格の push 失敗（再試行します）{p['slug']}: {out.strip()[:160]}")
+                    break
             p["status"], p["version"] = ("running", ver) if ver else ("failed", None)
             msgs.append(f"昇格の試走開始 {p['slug']} opts={popts}: {out.strip()[:100]}")
             break

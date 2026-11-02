@@ -95,15 +95,31 @@
     "fp8ple"
    ],
    "slug": "arc3-m2-bench10-fp8",
-   "status": "pending",
+   "status": "done",
    "metric": "decode_or_ready",
    "note": "FP8 PLE mirror (dfranzen 10/12, 125GB vs 181GB). Lead: Franzen 27.9 -> 36.86 by 10/15 after releasing it (cause unknown).",
-   "ref": "c_precache8"
+   "ref": "c_precache8",
+   "metrics": {
+    "dir": "c_fp8ple",
+    "weight_load_s": 208.13,
+    "ready_after_s": 413.0,
+    "decode_tok_s_ge8": 725.3,
+    "decode_samples": 970,
+    "accept_len": 2.68,
+    "prefix_cached_share": 0.942,
+    "games": 10,
+    "harness_tokens": 1990957,
+    "levels": 53.0,
+    "actions": 2347,
+    "mean_score_public_subset": 66.92
+   }
   }
  ],
- "adopted": [],
- "decided": false,
- "hold_notified": true,
+ "adopted": [
+  "precache8"
+ ],
+ "decided": true,
+ "hold_notified": false,
  "smoke_notified": false,
  "extra_promotions": [
   {
@@ -111,12 +127,31 @@
    "slug": "arc3-m2-robust-pv",
    "config": "E10",
    "extra_opts": [
-    "persistvars"
+    "persistvars",
+    "inputfix"
    ],
    "status": "pending",
    "markers": [
     "persistvars patch applied"
-   ]
+   ],
+   "note": "v1/v2 ERROR: taaf bundle not mounted at /kaggle/input/datasets/...; v3 adds inputfix (#13)"
+  }
+ ],
+ "promote": [
+  {
+   "variant": "robust",
+   "slug": "arc3-m2-robust-pv",
+   "config": "E10",
+   "extra_opts": [
+    "persistvars",
+    "inputfix"
+   ],
+   "status": "swapped",
+   "markers": [
+    "persistvars patch applied"
+   ],
+   "note": "v3 ERROR: flat input layout (/kaggle/input/<slug>), competition path also; inputfix v2 resolves all inputs; waiting smoke",
+   "version": 4
   }
  ]
 }

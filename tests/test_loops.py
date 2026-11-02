@@ -113,3 +113,39 @@ def test_swap_queue_by_tag(tmp_path):
     assert r[0]["kernel"] == "taichiiiii/arc3-m2-robust-opt"
     assert r[1]["kernel"] == "taichiiiii/arc3-m2-robust-pv" and r[1]["config"].startswith("A=") and "verify" not in r[1]
     assert "persistvars patch applied" in r[1]["markers"] and "PRIORITY_FORM installed: form=dprime" not in r[1]["markers"]
+
+
+def test_auth_blip_does_not_fail_bench_or_promotion(tmp_path, monkeypatch):
+    import json
+    st = {"benches": [{"name": "base1", "status": "running", "slug": "b", "opts": [], "metric": "base"}],
+          "adopted": ["precache8"], "decided": True,
+          "promote": [{"variant": "robust", "slug": "arc3-m2-robust-pv", "config": "E10", "status": "pending",
+                       "extra_opts": ["persistvars"], "markers": []}]}
+    sf, qf = tmp_path / "s.json", tmp_path / "q.json"
+    sf.write_text(json.dumps(st))
+    qf.write_text(json.dumps({"queue": []}))
+    monkeypatch.setattr(bench_loop, "STATE", sf)
+    monkeypatch.setattr(bench_loop, "QUEUE", qf)
+    smoke = tmp_path / "smoke"
+    smoke.mkdir()
+    (smoke / "robust-persistvars-precache8.json").write_text(json.dumps({"ok": True, "opts": ["persistvars", "precache8"]}))
+    monkeypatch.setattr(bench_loop, "ROOT", tmp_path.parent / tmp_path.name)
+    (tmp_path / "analysis").mkdir()
+    (tmp_path / "analysis" / "smoke").symlink_to(smoke)
+    auth = "401 Client Error: Unauthorized. Authentication failed"
+    monkeypatch.setattr(bench_loop.loop_tick, "kaggle", lambda *a, **k: "ok" if a[0] == "competitions" else auth)
+    monkeypatch.setattr(bench_loop, "push", lambda *a, **k: auth)
+    bench_loop.main()
+    r = json.loads(sf.read_text())
+    assert r["benches"][0]["status"] == "running"
+    assert r["promote"][0]["status"] == "pending" and r["promote"][0].get("push_tries", 0) == 0
+
+
+def test_paired_eval_detects_shift():
+    import paired_eval as pe
+    base = [{g: v for g, v in zip("abcdefgh", [10, 20, 30, 40, 50, 60, 70, 80])},
+            {g: v + 1 for g, v in zip("abcdefgh", [10, 20, 30, 40, 50, 60, 70, 80])}]
+    cand = [{g: v + 10 + (i % 2) for i, (g, v) in enumerate(zip("abcdefgh", [10, 20, 30, 40, 50, 60, 70, 80]))}]
+    r = pe.compare(base, cand)
+    assert r["verdict"] == "改善" and 9 < r["diff"] < 11
+    assert pe.runs_needed(10.0, 10, 3.0) == 5
