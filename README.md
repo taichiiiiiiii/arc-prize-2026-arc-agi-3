@@ -6,7 +6,8 @@ This repository is a fork of Daniel Franzen's public *Milestone 2* solution (Qwe
 W4A16 served by SGLang on one RTX PRO 6000, Duck/TAAF tool-calling harness). All changes are
 applied as patches by `kernels/m2_robust/build.py` on top of the unchanged notebook in
 `third_party/`, so every modification is visible as a diff. Notes and the experiment ledger are in
-Japanese.
+Japanese. Issue and PR numbers in commit messages and notes (#1, #4, …) refer to the original
+private working repository; its history was carried over here with template-derived files removed.
 
 ## Results
 
