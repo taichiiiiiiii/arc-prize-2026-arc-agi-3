@@ -12,6 +12,9 @@ The queue and all state live in analysis/loop_state.json. The plan is fixed in a
 Final selection (2 slots) is NOT done here.
 
 Usage:  env -u PYTHONPATH uv run python scripts/loop_tick.py [--dry-run] [--verbose]
+
+Side effects: submits to the competition and edits analysis/*.json. This is the author's scheduled
+automation; set KAGGLE_USERNAME / KAGGLE_CLI and replace the queue in analysis/loop_state.json before use.
 """
 
 from __future__ import annotations
@@ -20,17 +23,19 @@ import argparse
 import csv
 import io
 import json
+import os
 import re
+import shutil
 import subprocess
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, UTC
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 STATE = ROOT / "analysis" / "loop_state.json"
 LOG_MD = ROOT / "analysis" / "submission_log.md"
 COMP = "arc-prize-2026-arc-agi-3"
-KAGGLE = "/Library/Frameworks/Python.framework/Versions/3.14/bin/kaggle"
+KAGGLE = os.environ.get("KAGGLE_CLI") or shutil.which("kaggle") or "kaggle"  # override with KAGGLE_CLI
 WORK = ROOT / "work" / "loop"
 SUMMARY_RE = re.compile(r"^\s+([a-z0-9]{4}-[0-9a-f]+): score=([\d.]+), levels=([\d.]+)/(\d+), "
                         r"actions=(\d+), tokens=(\d+)\s*$", re.M)
@@ -98,7 +103,7 @@ def _lock():
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()
@@ -124,7 +129,7 @@ def main() -> int:
     state["reported"] = sorted(seen)
 
     # 3. submit the next item
-    today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    today = datetime.now(UTC).strftime("%Y-%m-%d")
     pending = [s for s in subs if "PENDING" in s["status"]]
     today_n = sum(1 for s in subs if s["date"].startswith(today))
     queue = state["queue"]
@@ -147,7 +152,7 @@ def main() -> int:
                          "-f", "submission.parquet", "-m", msg)
             ok = any(s2["description"] == msg for s2 in submissions())  # confirm by reading back
             if ok:
-                nxt["state"], nxt["submitted_at"] = "submitted", datetime.now(timezone.utc).isoformat()
+                nxt["state"], nxt["submitted_at"] = "submitted", datetime.now(UTC).isoformat()
                 msgs.append(f"提出しました: {msg}")
             else:
                 msgs.append(f"提出失敗: {msg}: {out.strip()[:300]}")

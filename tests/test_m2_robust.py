@@ -39,7 +39,7 @@ def test_build_edits_and_metadata():
     rerun_block = o16[o16.index("if TRUE_SUBMISSION:"):o16.index("else:")]
     assert rerun_block in code[16]
     # every other cell byte-identical to the source
-    for i, (a, b) in enumerate(zip(orig["cells"], nb["cells"])):
+    for i, (a, b) in enumerate(zip(orig["cells"], nb["cells"], strict=False)):
         if i not in (4, 16, 20):
             assert "".join(a["source"]) == "".join(b["source"]), i
     meta = json.loads((nb_path.parent / "kernel-metadata.json").read_text())
@@ -143,7 +143,7 @@ def test_build_dprime_variant_inserts_cell_only():
     assert code[17] == extra
     assert code[:17] == rob[:17] and code[18:] == rob[17:]
     meta = json.loads((nb_path.parent / "kernel-metadata.json").read_text())
-    assert meta["id"] == "taichiiiii/arc3-m2-robust-dprime" and meta["is_private"] is True
+    assert meta["id"] == f"{build.OWNER}/arc3-m2-robust-dprime" and meta["is_private"] is True
 
 
 def _harness_importable():
@@ -158,7 +158,6 @@ def _harness_importable():
 @pytest.mark.skipif(not _harness_importable(), reason="needs the TAAF harness on PYTHONPATH")
 def test_dprime_installs_on_real_harness_and_orders_sensibly():
     import inference.agent.tool_agent as ta
-    import inference.framework.solver as sv
 
     orig_pv = ta.priority_value
     os.environ["ARC3_PRIORITY_FORM"] = "dprime"

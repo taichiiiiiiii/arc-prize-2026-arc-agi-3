@@ -48,8 +48,8 @@ def compare(base: list[dict[str, float]], cand: list[dict[str, float]]) -> dict:
             "diff": round(mean, 2), "paired_se": round(se, 2),
             "verdict": "改善" if mean > 2 * se else ("悪化" if mean < -2 * se else "差なし"),
             "per_game_run_sd_base": spread(base), "per_game_run_sd_cand": spread(cand),
-            "worst_games": sorted(((round(mc[g] - mb[g], 1), g) for g in games))[:3],
-            "best_games": sorted(((round(mc[g] - mb[g], 1), g) for g in games))[-3:]}
+            "worst_games": sorted((round(mc[g] - mb[g], 1), g) for g in games)[:3],
+            "best_games": sorted((round(mc[g] - mb[g], 1), g) for g in games)[-3:]}
 
 
 def runs_needed(sd_pergame_diff: float, games: int, effect: float) -> int:

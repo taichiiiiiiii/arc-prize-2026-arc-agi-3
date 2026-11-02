@@ -32,3 +32,12 @@ dev = [
 
 [tool.uv]
 package = false
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = ["third_party", "*.ipynb"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP"]
+ignore = ["E501"]  # build.py embeds notebook patches as long string literals
