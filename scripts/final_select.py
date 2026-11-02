@@ -21,6 +21,7 @@ import argparse
 import csv
 import io
 import math
+import os
 import statistics as st
 import subprocess
 from dataclasses import dataclass
@@ -92,7 +93,7 @@ def main() -> None:
     if a.csv:
         text = open(a.csv).read()
     else:
-        text = subprocess.run(["kaggle", "competitions", "submissions", COMP, "--page-size", "100", "--csv"],
+        text = subprocess.run([os.environ.get("KAGGLE_CLI", "kaggle"), "competitions", "submissions", COMP, "--page-size", "100", "--csv"],
                               capture_output=True, text=True, timeout=300).stdout
         text = "\n".join(line for line in text.splitlines() if not line.startswith("Warning"))
     r = select(parse(text))

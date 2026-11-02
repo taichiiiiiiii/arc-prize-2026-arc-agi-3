@@ -12,6 +12,9 @@ The queue and all state live in analysis/loop_state.json. The plan is fixed in a
 Final selection (2 slots) is NOT done here.
 
 Usage:  env -u PYTHONPATH uv run python scripts/loop_tick.py [--dry-run] [--verbose]
+
+Side effects: submits to the competition and edits analysis/*.json. This is the author's scheduled
+automation; set KAGGLE_USERNAME / KAGGLE_CLI and replace the queue in analysis/loop_state.json before use.
 """
 
 from __future__ import annotations
@@ -100,7 +103,7 @@ def _lock():
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--verbose", action="store_true")
     a = ap.parse_args()

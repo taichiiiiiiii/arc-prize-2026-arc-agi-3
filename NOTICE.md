@@ -2,7 +2,7 @@
 
 This repository builds on public work from the ARC Prize 2026 — ARC-AGI-3 community. The code
 under `third_party/` is kept unchanged. Modifications are not made to these files; they are
-applied at build time as patches by `kernels/m2_robust/build.py`, so every change is visible there.
+applied at build time as patches by `kernels/m2_robust/build.py`, so every change is visible there. Comments inside them may refer to upstream-only files.
 
 | Path | Origin | License |
 |---|---|---|

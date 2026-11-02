@@ -8,7 +8,7 @@ COMP=arc-prize-2026-arc-agi-3
 OUT=${TMPDIR:-/tmp}/rehearse_$(echo $SLUG | tr / _)_v$VER
 REQUIRED=("m2-robust: keepalive patch applied" "taaf.kaggle: TRUE_SUBMISSION=False")
 [ -n "${EXTRA_MARKER:-}" ] && REQUIRED+=("$EXTRA_MARKER")
-k() { kaggle "$@" 2>&1 | grep -v "outdated"; }
+k() { "${KAGGLE_CLI:-kaggle}" "$@" 2>&1 | grep -v "outdated"; }
 
 while true; do
   s=$(k kernels status $SLUG)
