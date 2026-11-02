@@ -35,11 +35,11 @@
 3. **コミット**: 1 論理単位ごと、`feat(...)` / `fix(...)` / `chore(...)` の形、本文に `Refs #番号`。
 4. **PR**: ブランチを push して `gh pr create --base develop`。本文に変更内容・数値・`Fixes #番号`。
 5. **CI**: GitHub Actions の `tests` が通るまでマージしない。
-   - 暫定（2026-10-29 オーナー承認、締切まで）: GitHub Actions が課金エラーで開始されないため、PR の head で手元の `env -u PYTHONPATH uv run pytest -q tests/` を実行し、結果（passed/skipped 数と head のコミット）を PR にコメントしたものを CI 通過とみなす。public 化後は Actions に戻す。
+   - Actions が動かない間は、PR の head で手元の `uv run pytest -q tests/` と `uv run ruff check .` を実行し、結果を PR にコメントしたものを CI 通過とみなした（非公開期間の暫定措置）。
 6. **マージ**: 受け入れ条件を満たしたら `gh pr merge --merge --delete-branch`（マージコミットを残す）。
 7. **確認と記録**: マージ後の `develop` で測り直し、結果を Issue にコメントし、#1 のチェックを更新する。
 
 補足:
-- 作業ディレクトリは 1 つ（worktree は作らない）。cron の提出ループ・改善ループはこの作業ツリーのスクリプトを実行するので、作業ブランチにいる時間は短くし、終わったら必ず `develop` に戻る。
+- 作業ディレクトリは 1 つ（worktree は作らない）。定期実行の提出ループ・改善ループはこの作業ツリーのスクリプトを実行するので、作業ブランチにいる時間は短くし、終わったら必ず `develop` に戻る。
 - 自動ループが書き換える記録ファイル（`analysis/loop_state.json`、`analysis/bench_state.json`、`analysis/submission_log.md`、`analysis/smoke/*.json`、`analysis/reviews/*.md`）は、日次レビューでまとめて `chore/<親番号>-records-YYYYMMDD` ブランチの PR にする（`Refs #1`）。
 - `main` は締切時点の最終版を残すためだけに使い、`develop` からマージする。

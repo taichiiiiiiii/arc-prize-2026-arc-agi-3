@@ -110,8 +110,8 @@ def test_swap_queue_by_tag(tmp_path):
     finally:
         bench_loop.QUEUE = old
     r = json.loads(f.read_text())["queue"]
-    assert r[0]["kernel"] == "taichiiiii/arc3-m2-robust-opt"
-    assert r[1]["kernel"] == "taichiiiii/arc3-m2-robust-pv" and r[1]["config"].startswith("A=") and "verify" not in r[1]
+    assert r[0]["kernel"] == f"{bench_loop.OWNER}/arc3-m2-robust-opt"
+    assert r[1]["kernel"] == f"{bench_loop.OWNER}/arc3-m2-robust-pv" and r[1]["config"].startswith("A=") and "verify" not in r[1]
     assert "persistvars patch applied" in r[1]["markers"] and "PRIORITY_FORM installed: form=dprime" not in r[1]["markers"]
 
 

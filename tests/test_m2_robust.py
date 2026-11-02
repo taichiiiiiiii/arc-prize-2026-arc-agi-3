@@ -143,7 +143,7 @@ def test_build_dprime_variant_inserts_cell_only():
     assert code[17] == extra
     assert code[:17] == rob[:17] and code[18:] == rob[17:]
     meta = json.loads((nb_path.parent / "kernel-metadata.json").read_text())
-    assert meta["id"] == "taichiiiii/arc3-m2-robust-dprime" and meta["is_private"] is True
+    assert meta["id"] == f"{build.OWNER}/arc3-m2-robust-dprime" and meta["is_private"] is True
 
 
 def _harness_importable():

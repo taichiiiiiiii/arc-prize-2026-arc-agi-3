@@ -12,3 +12,7 @@ recordings/
 .DS_Store
 kernels/*/out/
 analysis/.loop.lock
+.venv*/
+*.log
+.ruff_cache/
+.pytest_cache/

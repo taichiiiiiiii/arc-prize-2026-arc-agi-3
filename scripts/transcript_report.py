@@ -14,7 +14,6 @@ from __future__ import annotations
 import collections
 import json
 import re
-import sys
 from pathlib import Path
 
 ERR = re.compile(r"([A-Za-z_]+(?:Error|Exception|Exit|Interrupt))\b")
@@ -87,12 +86,12 @@ def game_report(path: Path) -> dict:
 
 
 def main() -> None:
-    args = sys.argv[1:]
-    out = None
-    if "--json" in args:
-        i = args.index("--json")
-        out = args[i + 1]
-        args = args[:i] + args[i + 2:]
+    import argparse
+    ap = argparse.ArgumentParser(description="Token / tool-error breakdown from *_requests.jsonl request logs.")
+    ap.add_argument("dirs", nargs="+", help="directories that contain <game>_requests.jsonl")
+    ap.add_argument("--json", dest="out", help="also write the per-game report to this JSON file")
+    a = ap.parse_args()
+    args, out = a.dirs, a.out
     allr = {}
     for d in args:
         for p in sorted(Path(d).glob("*_requests.jsonl")):
